@@ -1,3 +1,5 @@
 /com/
 /config/
 /sql/
+/min/
+/log4j.properties
