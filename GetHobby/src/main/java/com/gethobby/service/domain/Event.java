@@ -1,6 +1,8 @@
 package com.gethobby.service.domain;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Event {
 	
@@ -10,7 +12,7 @@ public class Event {
 	private String eventContent;
 	private Date eventStartDate;
 	private Date eventEndDate;
-	private String Category;
+	private List<String> category;
 	private int eventDiscount;
 	private String eventImage;
 	private HobbyClass hobbyClass;
@@ -22,6 +24,7 @@ public class Event {
 
 	/// Getter, Setter 
 	public int getEventNo() {
+
 		return eventNo;
 	}
 
@@ -61,12 +64,12 @@ public class Event {
 		this.eventEndDate = eventEndDate;
 	}
 
-	public String getCategory() {
-		return Category;
+	public List<String> getCategory() {
+		return category;
 	}
 
-	public void setCategory(String category) {
-		Category = category;
+	public void setCategory(List<String> category) {
+		this.category = category;
 	}
 
 	public int getEventDiscount() {
@@ -105,7 +108,7 @@ public class Event {
 	@Override
 	public String toString() {
 		return "Event [eventNo=" + eventNo + ", eventTitle=" + eventTitle + ", eventContent=" + eventContent
-				+ ", eventStartDate=" + eventStartDate + ", eventEndDate=" + eventEndDate + ", Category=" + Category
+				+ ", eventStartDate=" + eventStartDate + ", eventEndDate=" + eventEndDate + ", category=" + category
 				+ ", eventDiscount=" + eventDiscount + ", eventImage=" + eventImage + ", user=" + user + "]";
 	}
 

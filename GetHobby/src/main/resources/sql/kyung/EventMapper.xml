@@ -5,5 +5,39 @@
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="EventMapper">
+
+<resultMap id="eventSelectMap" type="event">
+<result property="eventNo" 				column="EVENT_NO"		jdbcType="INTEGER"/>
+<result property="eventTitle" 			column="EVENT_TITLE"		jdbcType="VARCHAR"/>
+<result property="eventContent" 		column="EVENT_CONTENT"		jdbcType="CLOB"		javaType="java.lang.String"/>
+<result property="eventStartDate"		column="START_DATE"		jdbcType="DATE"/>
+<result property="eventEndDate" 		column="END_DATE"		jdbcType="DATE"/>
+<result property="Category" 			column="EVENT_CATEGORY"		jdbcType="VARCHAR"/>
+<result property="eventDiscount" 		column="EVENT_DISCOUNT"		jdbcType="INTEGER"/>
+<result property="eventImage" 			column="EVENT_IMAGE"		jdbcType="INTEGER"/>
+<result property="hobbyClass.hobbyClassNo" 	column="class_no"	jdbcType="INTEGER"/>
+<result property="user.userId" 			column="user_id"		jdbcType="INTEGER"/>
+
+</resultMap>
+ 	
+ 	<insert id="addEventAdmin" parameterType="event">
+ 		INSERT
+ 		INTO event (EVENT_NO, EVENT_TITLE, EVENT_CONTENT, START_DATE, END_DATE, EVENT_CATEGORY, EVENT_DISCOUNT, EVENT_IMAGE )
+ 		VALUE (		seq_event_event_no.NEXTVAL,
+ 					#{eventTitle:VARCHAR},
+ 					#{eventContent},
+ 					#{eventStartDate},
+ 					#{eventEndDate},
+ 					#{Category},
+ 					#{eventDiscount},
+ 					#{eventImage}      )
+ 	</insert>
+ 	
+ 	<insert id="addEventCategory" parameterType="map">
+ 		INSERT
+ 		INTO event 
+ 	
+ 	</insert>
+ 	
  	
 </mapper>
