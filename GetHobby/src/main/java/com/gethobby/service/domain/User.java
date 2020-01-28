@@ -20,7 +20,7 @@ public class User {
 	private String pastCode;
 	private String address;
 	private String detailAddress;
-	private String reitreMessage;
+	private String retireMessage;
 	private String stopReason;
 	private Date retireDate;
 	private Date stopDate;
@@ -138,11 +138,11 @@ public class User {
 	}
 
 	public String getReitreMessage() {
-		return reitreMessage;
+		return retireMessage;
 	}
 
 	public void setReitreMessage(String reitreMessage) {
-		this.reitreMessage = reitreMessage;
+		this.retireMessage = reitreMessage;
 	}
 
 	public String getStopReason() {
@@ -184,7 +184,7 @@ public class User {
 				+ ", profileImage=" + profileImage + ", totalReport=" + totalReport + ", birth=" + birth + ", password="
 				+ password + ", rePassword=" + rePassword + ", beforePassword=" + beforePassword + ", nickName="
 				+ nickName + ", pastCode=" + pastCode + ", address=" + address + ", detailAddress=" + detailAddress
-				+ ", reitreMessage=" + reitreMessage + ", stopReason=" + stopReason + ", retireDate=" + retireDate
+				+ ", reitreMessage=" + retireMessage + ", stopReason=" + stopReason + ", retireDate=" + retireDate
 				+ ", stopDate=" + stopDate + ", addDate=" + addDate + "]";
 	}	
 	

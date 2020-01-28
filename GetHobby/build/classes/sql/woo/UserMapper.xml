@@ -6,4 +6,39 @@
 
 <mapper namespace="UserMapper">
  	
+ 	<resultMap id="userSelectMap" type="user">
+ 		<result property="userId"		column = "user_id" 		jdbcType="VARCHAR"/>
+ 		<result property="name" 	column = "name"			jdbcType="VARCHAR"/>
+ 		<result property="nickName" 	column="nickname"	jdbcType="VARCHAR"/>
+ 		<result property="password"		column="password"	jdbcType="VARCHAR"/>
+ 		<result property="birth"		column="birth_date"		jdbcType="VARCHAR"/>
+ 		<result property="phone"		column="phone"			jdbcType="VARCHAR"/>
+ 		<result property="sex"			column="sex"			jdbcType="VARCHAR"/>
+ 		<result property="address"		column="address"		jdbcType="VARCHAR"/>
+ 		<result property="detailAddress" 	column="detail_address"		jdbcType="VARCHAR"/>
+ 		<result property="postCode"		column="postcode"		jdbcType="VARCHAR"/>
+ 		<result property="role"			column="role"			jdbcType="CHAR"/>
+ 		<result property="profileImage"		column="profile_image"		jdbcType="VARCHAR"/>
+ 		<result property="totalReport"		column="total_report"		jdbcType="INTEGER"/>
+ 		<result property="retireMessage"		column="reason_code"		jdbcType="CHAR"/>
+ 		<result property="retireDate"		column="retire_date"		jdbcType="DATE"/>
+ 		<result property="stopDate"		column="stop_date"			jdbcType="DATE"/>
+ 		<result property="addDate"		column="add_date"			jdbcType="DATE"/> 	
+ 	</resultMap>
+ 	
+ 	<insert id="addUser"		parameterType="user">
+ 		INSERT
+ 		INTO users(user_id,name,nickname,password,birth_date,phone,sex,address,detail_address,postcode,role,profile_image,add_date)
+ 		VALUES (#{userID},#{name},#{nickName:VARCHAR},#{password},#{birth},#{phone:VARCHAR},#{sex},#{address:VARCHAR},#{detailAddress:VARCHAR},#{postCode:VARCHAR},0,#{profileImage:VARCHAR},SYSDATE)
+ 	
+ 	</insert>
+ 	
+ 	<select id="getUser"   parameterType="String" parameterMap="userSelectMap">
+ 		SELECT
+ 		user_id,name,nickname,password,birth_date,phone,sex,address,detail_address,postcode,role,profile_image,add_date
+ 		FROM users
+ 		WHERE user_id = #{value}
+ 	</select>
+ 	
+ 	
 </mapper>
