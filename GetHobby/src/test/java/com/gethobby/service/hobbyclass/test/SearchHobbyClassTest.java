@@ -51,7 +51,7 @@ public class SearchHobbyClassTest {
 	@Value("#{commonProperties['pageSize']}")
 	int pageSize;
 	
-	@Test
+	//@Test
 	public void testGetHobbyClass() throws Exception {
 		HobbyClass hobbyClass = new HobbyClass();
 		
@@ -68,35 +68,27 @@ public class SearchHobbyClassTest {
 		Assert.assertEquals(10000, hobbyClass.getHobbyClassNo());
 	}
 	
-	//@Test
+	@Test
 	public void testHobbyClassList() throws Exception {
 		Search search = new Search();
 		
 		search.setCurrentPage(1);
 		search.setPageSize(3);
 		
-		/* ũ�������� �г��� / Ŭ���� ���� �˻���� ������ ���Ǿ��� ������ �ش� �������� �˻�  */ 
-		
-		search.setSearchCondition("2");
-		search.setSearchKeyword("e");
-		
-		/* �ؽ��±� �˻���� ��� => ������ �ؽ��±� �Ϻ� ���� ������ �ؽ��±� ���þ��� ����  */
-		
+		search.setSearchCondition("1");
+		search.setSearchKeyword("t");
+
 		List<String> hashtagList = new ArrayList<String>();
 		hashtagList.add("M01");
 		hashtagList.add("E03");
 		
 		//search.setHashtag(hashtagList);
-		
-		/* ī�װ� �˻���� �ؽ��±� �������� ����, ������ ī�װ� �ϳ� ���� ������ ī�װ� ��ü ���� */
-		
+
 		//search.setCategory("E");
 		
 		Map<String, Object> inputData = new HashMap<String, Object>();
 		inputData.put("search", search); 
 		inputData.put("userId", "a@a.a");
-		
-		/* Ŭ���� ������·� ���ı�� �⺻�� null ���� �� �ش� ������� �ڵ� ����  */
 
 		inputData.put("classState", "3");
 		
@@ -231,7 +223,7 @@ public class SearchHobbyClassTest {
 		searchHobbyClassService.addHobbyClassAssess(classAssess);
 	}
 	
-	@Test
+	//@Test
 	public void testRecommendHobbyClassList() throws Exception {
 		List<String> hashtagList = searchHobbyClassService.getUserSelectHashtag("a@a.a");
 		

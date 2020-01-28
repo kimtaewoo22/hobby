@@ -120,9 +120,12 @@
  									 ) s, 
  									   <if test="search.hashtag != null" >
  									 	  ( SELECT  
- 									        class_no, 
- 									        substr(xmlagg(xmlelement(a, '/' || hashtag_code) ORDER BY hashtag_code).extract('//text()'), 2) hashtag_code 
- 									        FROM hashtag   
+ 									        inner_table.class_no class_no 
+ 									        FROM ( SELECT 
+ 									        	   class_no, hashtag_code 
+ 									        	   FROM hashtag 
+ 									        	   WHERE class_no IS NOT NULL 
+ 									        	 ) inner_table 	 
  									        <where>
 		 									    <foreach collection="search.hashtag" item="index" open="(" close=")" separator="or"> 
 		 									        hashtag_code = #{index}  
