@@ -1,7 +1,5 @@
 package com.gethobby.service.domain;
 
-import java.util.Date;
-
 public class Article {
 
 	/// Field
@@ -16,7 +14,7 @@ public class Article {
 	private int totalView;
 	private int totalFavor;
 	private int totalReport;
-	private Date regDate;
+	private String regDate;
 	
 	/// Constructor
 	public Article() {
@@ -111,11 +109,11 @@ public class Article {
 		this.totalReport = totalReport;
 	}
 
-	public Date getRegDate() {
+	public String getRegDate() {
 		return regDate;
 	}
 
-	public void setRegDate(Date regDate) {
+	public void setRegDate(String regDate) {
 		this.regDate = regDate;
 	}
 
