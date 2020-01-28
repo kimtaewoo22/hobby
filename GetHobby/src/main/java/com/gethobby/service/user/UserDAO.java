@@ -1,14 +1,35 @@
 package com.gethobby.service.user;
 
+import java.util.List;
+import java.util.Map;
+
+import com.gethobby.common.Search;
 import com.gethobby.service.domain.User;
 
-//È¸¿ø°ü¸®¿¡¼­ CRUD Ãß»óÈ­/Ä¸½¶È­ÇÑ DAO Interface Definition
+//È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ CRUD ï¿½ß»ï¿½È­/Ä¸ï¿½ï¿½È­ï¿½ï¿½ DAO Interface Definition
 public interface UserDAO {
 
 	//Insert
-	public void addUser(User user) throws Exception;
+	public void addUser(User	user) throws Exception;
 	
 	//Select
 	public User getUser(String userId)throws Exception;
 	
+	//Update
+	public void deleteUser(User user)throws Exception;
+	
+	//Update
+	public void updateUser(User user)throws Exception;
+	
+	//Update
+	public void changeUserCreator(User user) throws Exception;
+	
+	//Insert
+	public void addHashtag(Map map) throws Exception;
+	
+	//Select
+	public List<String> getUserListAdmin(Search search) throws Exception;
+	
+	//Select
+	public List<String> getStopUserListAdmin(Search search) throws Exception;
 }

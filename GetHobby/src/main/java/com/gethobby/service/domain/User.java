@@ -17,7 +17,7 @@ public class User {
 	private String rePassword;
 	private String beforePassword;
 	private String nickName;
-	private String pastCode;
+	private String postCode;
 	private String address;
 	private String detailAddress;
 	private String retireMessage;
@@ -113,12 +113,12 @@ public class User {
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
 	}
-	public String getPastCode() {
-		return pastCode;
+	public String getPostCode() {
+		return postCode;
 	}
 
-	public void setPastCode(String pastCode) {
-		this.pastCode = pastCode;
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
 	}
 
 	public String getAddress() {
@@ -183,7 +183,7 @@ public class User {
 		return "User [userId=" + userId + ", sex=" + sex + ", role=" + role + ", phone=" + phone + ", name=" + name
 				+ ", profileImage=" + profileImage + ", totalReport=" + totalReport + ", birth=" + birth + ", password="
 				+ password + ", rePassword=" + rePassword + ", beforePassword=" + beforePassword + ", nickName="
-				+ nickName + ", pastCode=" + pastCode + ", address=" + address + ", detailAddress=" + detailAddress
+				+ nickName + ", postCode=" + postCode + ", address=" + address + ", detailAddress=" + detailAddress
 				+ ", reitreMessage=" + retireMessage + ", stopReason=" + stopReason + ", retireDate=" + retireDate
 				+ ", stopDate=" + stopDate + ", addDate=" + addDate + "]";
 	}	

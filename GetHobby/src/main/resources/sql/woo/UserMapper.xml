@@ -29,16 +29,93 @@
  	<insert id="addUser"		parameterType="user">
  		INSERT
  		INTO users(user_id,name,nickname,password,birth_date,phone,sex,address,detail_address,postcode,role,profile_image,add_date)
- 		VALUES (#{userID},#{name},#{nickName:VARCHAR},#{password},#{birth},#{phone:VARCHAR},#{sex},#{address:VARCHAR},#{detailAddress:VARCHAR},#{postCode:VARCHAR},0,#{profileImage:VARCHAR},SYSDATE)
+ 		VALUES (#{userId},#{name},#{nickName:VARCHAR},#{password},#{birth},#{phone},#{sex},#{address:VARCHAR},#{detailAddress:VARCHAR},#{postCode:VARCHAR},'0',#{profileImage:VARCHAR},SYSDATE)
  	
  	</insert>
  	
- 	<select id="getUser"   parameterType="String" parameterMap="userSelectMap">
+ 	<insert id="addHashtag" parameterType="hashmap">
+ 		INSERT
+ 		INTO hashtag(hashtag_no,user_id,hashtag_code)
+ 		VALUES (seq_hashtag_hashtag_no.NEXTVAL,#{userId},#{hashCode})
+ 	
+ 	</insert>
+ 	
+ 	<select id="getUser"   parameterType="String" resultMap="userSelectMap">
  		SELECT
  		user_id,name,nickname,password,birth_date,phone,sex,address,detail_address,postcode,role,profile_image,add_date
  		FROM users
  		WHERE user_id = #{value}
  	</select>
  	
+ 	<update id="deleteUser" parameterType="user">
+ 		UPDATE users
+ 		<set>
+ 		role = #{role}
+ 		</set>
+ 		WHERE user_id = #{userId}
+ 	</update>
  	
+ 	<update id="updateUser" parameterType="user">
+ 		UPDATE users
+ 		<set>
+ 		address = #{address:VARCHAR},
+ 		detail_address = #{detailAddress:VARCHAR},
+ 		postcode = #{postCode:VARCHAR},
+ 		phone = #{phone:VARCHAR},
+ 		nickname = #{nickName:VARCHAR},
+ 		profile_image = #{profileImage:VARCHAR} 		
+ 		</set>
+ 		WHERE user_id = #{userId}
+ 	</update>
+ 	
+ 	<update id="changeUserCreator" parameterType="user">
+ 		UPDATE users
+ 		<set>
+ 		role=#{role}
+ 		</set>
+ 		WHERE user_id=#{userId}
+ 	</update>
+ 	<select id="getUserList" parameterType="search" resultMap="userSelectMap">
+ 	<!-- SELECT *
+	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+	  					FROM		( -->	SELECT user_id , name , add_date, role
+											FROM users
+											<if test="searchCondition != null">
+												<where>													
+													<if test="searchCondition == 0 and searchKeyword !='' ">
+										 				user_id = #{searchKeyword}
+													</if>
+													<if test="searchCondition == 1 and searchKeyword !='' ">
+										 				user_name = #{searchKeyword}
+													</if>
+												</where>
+											</if>
+											ORDER BY user_id<!--  ) inner_table
+						WHERE ROWNUM &lt;= #{endRowNum} )
+		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}  -->
+ 	
+ 	</select>
+ 	<select id="getStopUserList" parameterType="search" resultMap="userSelectMap">
+ 	<!-- SELECT *
+	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+	  					FROM		( -->	SELECT user_id , name , add_date, stop_date,reason_code
+											FROM users 
+											
+												<where>
+														role='9'	
+													<if test="searchCondition != null">
+																							
+													<if test="searchCondition == 0 and searchKeyword !='' ">
+										 				 user_id = #{searchKeyword}
+													</if>
+													<if test="searchCondition == 1 and searchKeyword !='' ">
+										 				user_name = #{searchKeyword}
+													</if>												
+											</if>
+											</where>
+											ORDER BY user_id<!--  ) inner_table
+						WHERE ROWNUM &lt;= #{endRowNum} )
+		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}  -->
+ 	
+ 	</select>
 </mapper>

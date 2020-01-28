@@ -99,7 +99,7 @@
 	<insert id="addLessonReply" parameterType="reply">
 		INSERT 
 		INTO lesson_reply( reply_no, lesson_no, user_id, reply_content, reg_date )  
-		VALUES( seq_lesson_lesson_reply_no.nextval, #{lesson.lessonNo}, #{user.userId}, #{replyContent}, TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI') )  
+		VALUES( seq_lesson_lesson_reply_no.nextval, #{lesson.lessonNo}, #{user.userId}, #{replyContent}, TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI'))  
 	</insert>
 	
 	<update id="updateLessonReply" parameterType="reply">
