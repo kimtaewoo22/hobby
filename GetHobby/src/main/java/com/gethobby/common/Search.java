@@ -13,7 +13,7 @@ public class Search {
 	private int startRowNum;
 	private String category;
 	private List<String> hashtag;
-	private int articleTypeCode;
+	private String articleType;
 	
 	/// Constructor
 	public Search() {
@@ -84,19 +84,19 @@ public class Search {
 		this.hashtag = hashtag;
 	}
 
-	public int getArticleTypeCode() {
-		return articleTypeCode;
+	public String getArticleType() {
+		return articleType;
 	}
 
-	public void setArticleTypeCode(int articleTypeCode) {
-		this.articleTypeCode = articleTypeCode;
+	public void setArticleType(String articleType) {
+		this.articleType = articleType;
 	}
 
 	@Override
 	public String toString() {
 		return "Search [currentPage=" + currentPage + ", searchCondition=" + searchCondition + ", searchKeyword="
 				+ searchKeyword + ", pageSize=" + pageSize + ", endRowNum=" + endRowNum + ", startRowNum=" + startRowNum
-				+ ", category=" + category + ", hashtag=" + hashtag + ", articleTypeCode=" + articleTypeCode + "]";
+				+ ", category=" + category + ", hashtag=" + hashtag + ", articleTypeCode=" + articleType + "]";
 	}
 	
 	

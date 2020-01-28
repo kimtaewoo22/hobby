@@ -5,5 +5,320 @@
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="BoardArticleMapper">
+
+ 	
+ 	
+ 	<resultMap type="article" id="articleSelectMap">
+  		
+  		<result property="articleNo"			column="article_no"			jdbcType="INTEGER" />
+  		<result property="user.userId"			column="user_id"			jdbcType="VARCHAR" />
+  		<result property="user.nickName"		column="nickname"			jdbcType="VARCHAR" />
+		<result property="user.profileImage"	column="profile_image"		jdbcType="VARCHAR" />
+  		<result property="boardCode"			column="board_code"			jdbcType="CHAR" />
+  		<result property="articleType"			column="article_type"		jdbcType="CHAR" />
+  		<result property="articleTitle"			column="article_title"		jdbcType="VARCHAR" />
+  		<result property="articleContent"		column="article_content" 	jdbcType="CLOB" />
+  		<result property="articleImage"			column="article_image"		jdbcType="VARCHAR" />
+  		<result property="totalView"			column="total_view"			jdbcType="INTEGER" />
+  		<result property="totalLike"			column="total_like"			jdbcType="INTEGER" />
+  		<result property="totalReport"			column="total_report"		jdbcType="INTEGER" />
+  		<result property="regDate"				column="reg_date"			jdbcType="VARCHAR" />
+  		
+  	</resultMap>
+ 	
+ 	<!-- 
+ 	INSERT INTO article(ARTICLE_NO, USER_ID, BOARD_CODE, ARTICLE_TYPE, ARTICLE_TITLE, ARTICLE_CONTENT, REG_DATE)
+VALUES(SEQ_ARTICLE_ARTICLE_NO.NEXTVAL, 'a@google.com', '0', '001', '첫번째로 작성하는 게시글 입니다.', '첫번째 11121111111111111111111111111111', TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI'));
+ 	 -->
+ 	 
+ 	 
+ 	 
+ 	 <insert id="addBoardArticle" parameterType="article">
+ 	 	
+ 	 	INSERT INTO 
+ 	 	article(article_no, user_id, board_code, article_type, article_title, article_content, article_image, reg_date)
+		VALUES( seq_article_article_no.NEXTVAL, 
+				#{user.userId}, 
+				#{boardCode}, 
+				#{articleType:VARCHAR}, 
+				#{articleTitle:VARCHAR}, 
+				#{articleContent}, 
+				#{articleImage:VARCHAR}, 
+				TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI'))
+				
+ 	 </insert>
+ 	 
+ 	 
+ 	 <select id="getBoardArticle" parameterType="int" resultMap="articleSelectMap">
+ 	 	
+ 	 	SELECT a.article_no, u.user_id, u.nickname, u.profile_image, a.board_code, a.article_type, a.article_title, a.article_content, a.article_image, a.total_view, a.total_favor, a.total_report, a.reg_date 
+		FROM article a, users u 
+		WHERE a.user_id = u.user_id 
+			  AND a.article_no = #{articleNo}
+ 	 	
+ 	 </select>
+ 	 
+ 	 
+ 	 <update id="updateTotalView" parameterType="int">
+ 	 
+ 	 	UPDATE article
+		SET total_view = total_view + 1    
+		WHERE article_no = #{articleNo}
+ 	 
+ 	 </update>
+ 	 
+ 	 <update id="updateBoardArticle" parameterType="article">
+ 	 
+ 	 	UPDATE article
+		SET article_type = #{articleType:VARCHAR},
+   			article_title = #{articleTitle:VARCHAR},
+    		article_content = #{articleContent}
+		WHERE article_no = #{articleNo}
+ 	 
+ 	 </update>
+ 	 
+ 	 <delete id="deleteBoardArticle" parameterType="int">
+ 	 	
+ 	 	DELETE 
+ 	 	FROM article
+ 	 	WHERE article_no = #{articleNo}
+ 	 	
+ 	 </delete>
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 <select id="getFreeBoardList" parameterType="search" resultMap="articleSelectMap">
+ 	 
+ 	 	
+ 	 	SELECT inner_table.*, ROWNUM as row_seq
+ 	 	FROM (
+ 	 	
+ 	 	SELECT a.article_no, u.user_id, u.nickname, a.article_type, a.article_title, a.reg_date, a.total_favor, a.total_view, a.total_report, a.article_content 
+		FROM article a, users u
+		WHERE a.user_id = u.user_id
+			  AND a.board_code = '0'
+			  <if test="articleType != null and searchCondition != null">
+					<!-- 말머리 전체 -->
+					<if test="articleType == 000">
+						<!-- 전체 범위 -->
+						<if test="searchCondition == 0 and searchKeyword !='' ">
+							AND (a.article_title || a.article_content || u.nickname) LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 제목 -->
+						<if test="searchCondition == 1 and searchKeyword !='' ">
+							AND a.article_title LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 내용 -->
+						<if test="searchCondition == 2 and searchKeyword !='' ">
+							AND a.article_content LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 작성자 닉네임 -->
+						<if test="searchCondition == 3 and searchKeyword !='' ">
+							AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+						</if>
+					</if>
+					
+					<!-- 말머리 꿀팁 -->
+					<if test="articleType == '001'">
+						AND a.article_type = '001'
+						<!-- 전체 범위 -->
+						<if test="searchCondition == 0 and searchKeyword !='' ">
+							AND (a.article_title || a.article_content || u.nickname) LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 제목 -->
+						<if test="searchCondition == 1 and searchKeyword !='' ">
+							AND a.article_title LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 내용 -->
+						<if test="searchCondition == 2 and searchKeyword !='' ">
+							AND a.article_content LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 작성자 닉네임 -->
+						<if test="searchCondition == 3 and searchKeyword !='' ">
+							AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+						</if>
+					</if>
+					
+					<!-- 말머리 잡담 -->
+					<if test="articleType == '002'">
+						AND a.article_type = '002'
+						<!-- 전체 범위 -->
+						<if test="searchCondition == 0 and searchKeyword !='' ">
+							AND (a.article_title || a.article_content || u.nickname) LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 제목 -->
+						<if test="searchCondition == 1 and searchKeyword !='' ">
+							AND a.article_title LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 내용 -->
+						<if test="searchCondition == 2 and searchKeyword !='' ">
+							AND a.article_content LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 작성자 닉네임 -->
+						<if test="searchCondition == 3 and searchKeyword !='' ">
+							AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+						</if>
+					</if>
+					
+					<!-- 말머리 질문 -->
+					<if test="articleType == '003'">
+						AND a.article_type = '003'
+						<!-- 전체 범위 -->
+						<if test="searchCondition == 0 and searchKeyword !='' ">
+							AND (a.article_title || a.article_content || u.nickname) LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 제목 -->
+						<if test="searchCondition == 1 and searchKeyword !='' ">
+							AND a.article_title LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 내용 -->
+						<if test="searchCondition == 2 and searchKeyword !='' ">
+							AND a.article_content LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 작성자 닉네임 -->
+						<if test="searchCondition == 3 and searchKeyword !='' ">
+							AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+						</if>
+					</if>
+				</if>
+		ORDER BY a.article_no DESC
+ 	 	) inner_table
+ 	 
+ 	 </select>
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 <select id="getFreeBoardTotalCount" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM (
+			SELECT a.article_no, u.user_id, u.nickname, a.article_type, a.article_title,a.reg_date, a.total_favor, a.total_view, a.total_report
+			FROM article a, users u
+			WHERE a.user_id = u.user_id
+				AND a.board_code = '0'
+				<if test="articleType != null and searchCondition != null">
+					<!-- 말머리 전체 -->
+					<if test="articleType == '000'">
+						<!-- 전체 범위 -->
+						<if test="searchCondition == 0 and searchKeyword !='' ">
+							AND (a.article_title || a.article_content || u.nickname) LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 제목 -->
+						<if test="searchCondition == 1 and searchKeyword !='' ">
+							AND a.article_title LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 내용 -->
+						<if test="searchCondition == 2 and searchKeyword !='' ">
+							AND a.article_content LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 작성자 닉네임 -->
+						<if test="searchCondition == 3 and searchKeyword !='' ">
+							AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+						</if>
+					</if>
+					
+					<!-- 말머리 꿀팁 -->
+					<if test="articleType == '001'">
+						AND a.article_type = '001'
+						<!-- 전체 범위 -->
+						<if test="searchCondition == 0 and searchKeyword !='' ">
+							AND (a.article_title || a.article_content || u.nickname) LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 제목 -->
+						<if test="searchCondition == 1 and searchKeyword !='' ">
+							AND a.article_title LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 내용 -->
+						<if test="searchCondition == 2 and searchKeyword !='' ">
+							AND a.article_content LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 작성자 닉네임 -->
+						<if test="searchCondition == 3 and searchKeyword !='' ">
+							AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+						</if>
+					</if>
+					
+					<!-- 말머리 잡담 -->
+					<if test="articleType == '002'">
+						AND a.article_type = '002'
+						<!-- 전체 범위 -->
+						<if test="searchCondition == 0 and searchKeyword !='' ">
+							AND (a.article_title || a.article_content || u.nickname) LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 제목 -->
+						<if test="searchCondition == 1 and searchKeyword !='' ">
+							AND a.article_title LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 내용 -->
+						<if test="searchCondition == 2 and searchKeyword !='' ">
+							AND a.article_content LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 작성자 닉네임 -->
+						<if test="searchCondition == 3 and searchKeyword !='' ">
+							AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+						</if>
+					</if>
+					
+					<!-- 말머리 질문 -->
+					<if test="articleType == '003'">
+						AND a.article_type = '003'
+						<!-- 전체 범위 -->
+						<if test="searchCondition == 0 and searchKeyword !='' ">
+							AND (a.article_title || a.article_content || u.nickname) LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 제목 -->
+						<if test="searchCondition == 1 and searchKeyword !='' ">
+							AND a.article_title LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 내용 -->
+						<if test="searchCondition == 2 and searchKeyword !='' ">
+							AND a.article_content LIKE '%'||#{searchKeyword}||'%'
+						</if>
+						
+						<!-- 게시글 작성자 닉네임 -->
+						<if test="searchCondition == 3 and searchKeyword !='' ">
+							AND u.nickname LIKE '%'||#{searchKeyword}||'%'
+						</if>
+					</if>
+				</if>
+		) countTable
+	</select>
+ 	 
+ 	 
  	
 </mapper>
