@@ -1,11 +1,12 @@
 package com.gethobby.service.domain;
 
 import java.sql.Date;
+import java.util.List;
 
 public class HobbyClass {
 
 	/// Field
-	private int hobbyClassId;
+	private int hobbyClassNo;
 	private User user;
 	private Event event;
 	private String hobbyClassName;
@@ -20,32 +21,32 @@ public class HobbyClass {
 	private Date endDate;
 	private Date lessonDate;
 	private String category;
-	private String hashtag;
+	private List<String> hashtag;
 	private int lessonTotalCount;
 	private int hobbyClassPersonnel;
 	private String hobbyClassState;
 	private int totalMoney;
 	private int steamCount;
-	private int totalGrade;
-	private boolean steamCheck;
+	private double totalGrade;
+	private String steamCheck;
 	
 	/// Constructor
 	public HobbyClass() {
 	}
 	
 	/// Method
-	public int getHobbyClassId() {
-		return hobbyClassId;
-	}
-	
-	public void setHobbyClassId(int hobbyClassId) {
-		this.hobbyClassId = hobbyClassId;
-	}
-	
 	public User getUser() {
 		return user;
 	}
 	
+	public int getHobbyClassNo() {
+		return hobbyClassNo;
+	}
+
+	public void setHobbyClassNo(int hobbyClassNo) {
+		this.hobbyClassNo = hobbyClassNo;
+	}
+
 	public void setUser(User user) {
 		this.user = user;
 	}
@@ -153,15 +154,15 @@ public class HobbyClass {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	
-	public String getHashtag() {
+
+	public List<String> getHashtag() {
 		return hashtag;
 	}
-	
-	public void setHashtag(String hashtag) {
+
+	public void setHashtag(List<String> hashtag) {
 		this.hashtag = hashtag;
 	}
-	
+
 	public int getLessonTotalCount() {
 		return lessonTotalCount;
 	}
@@ -202,25 +203,28 @@ public class HobbyClass {
 		this.steamCount = steamCount;
 	}
 	
-	public int getTotalGrade() {
-		return totalGrade;
-	}
-	
-	public void setTotalGrade(int totalGrade) {
-		this.totalGrade = totalGrade;
-	}
-	
-	public boolean isSteamCheck() {
+
+	public String getSteamCheck() {
 		return steamCheck;
 	}
 	
-	public void setSteamCheck(boolean steamCheck) {
+	public void setSteamCheck(String steamCheck) {
 		this.steamCheck = steamCheck;
+	}
+	
+	
+
+	public double getTotalGrade() {
+		return totalGrade;
+	}
+
+	public void setTotalGrade(double totalGrade) {
+		this.totalGrade = totalGrade;
 	}
 
 	@Override
 	public String toString() {
-		return "HobbyClass [hobbyClassId=" + hobbyClassId + ", user=" + user + ", event=" + event + ", hobbyClassName="
+		return "HobbyClass [hobbyClassNo=" + hobbyClassNo + ", user=" + user + ", event=" + event + ", hobbyClassName="
 				+ hobbyClassName + ", hobbyClassImage=" + hobbyClassImage + ", hobbyClassIntro=" + hobbyClassIntro
 				+ ", hobbyClassPrice=" + hobbyClassPrice + ", kitName=" + kitName + ", kitImage=" + kitImage
 				+ ", kitPrice=" + kitPrice + ", kitIntro=" + kitIntro + ", startDate=" + startDate + ", endDate="

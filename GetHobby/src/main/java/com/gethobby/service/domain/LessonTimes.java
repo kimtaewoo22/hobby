@@ -9,6 +9,7 @@ public class LessonTimes {
 	private int currentTimes;
 	private int totalTimes;
 	private int maxTimes;
+	private HobbyClass hobbyClass;
 	
 	/// Constructor 
 	public LessonTimes() {
@@ -61,6 +62,14 @@ public class LessonTimes {
 
 	public void setMaxTimes(int maxTimes) {
 		this.maxTimes = maxTimes;
+	}
+	
+	public HobbyClass getHobbyClass() {
+		return hobbyClass;
+	}
+
+	public void setHobbyClass(HobbyClass hobbyClass) {
+		this.hobbyClass = hobbyClass;
 	}
 
 	@Override

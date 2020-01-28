@@ -12,7 +12,7 @@ public class Reply {
 	private String replyContent;
 	private String replyImage;
 	private int totalReport;
-	private Date regDate;
+	private String regDate;
 
 	/// Constructor 
 	public Reply() {
@@ -75,11 +75,11 @@ public class Reply {
 		this.totalReport = totalReport;
 	}
 
-	public Date getRegDate() {
+	public String getRegDate() {
 		return regDate;
 	}
 
-	public void setRegDate(Date regDate) {
+	public void setRegDate(String regDate) {
 		this.regDate = regDate;
 	}
 
