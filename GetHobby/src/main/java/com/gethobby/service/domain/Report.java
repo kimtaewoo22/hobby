@@ -8,6 +8,7 @@ public class Report {
 	private int articleNo;
 	private String reportCode;
 	private String regDate;
+	private String reportState; 
 	
 	/// Constructor
 	public Report() {
@@ -60,6 +61,14 @@ public class Report {
 	
 	public void setRegDate(String regDate) {
 		this.regDate = regDate;
+	}
+	
+	public String getReportState() {
+		return reportState;
+	}
+
+	public void setReportState(String reportState) {
+		this.reportState = reportState;
 	}
 
 	@Override

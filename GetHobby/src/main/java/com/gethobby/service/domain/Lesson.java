@@ -3,7 +3,7 @@ package com.gethobby.service.domain;
 public class Lesson {
 	
 	/// Field
-	private int lessonId;
+	private int lessonNo;
 	private HobbyClass hobbyClass;
 	private String lessonTitle;
 	private String lessonImage;
@@ -11,20 +11,14 @@ public class Lesson {
 	private String lessonContent;
 	private String lessonProject;
 	private String lessonVideo;
+	private int totalCount;
+	private int currentCount;
 	
 	/// Constructor 
 	public Lesson() {
 	}
 	
 	/// Getter, Setter
-	public int getLessonId() {
-		return lessonId;
-	}
-
-	public void setLessonId(int lessonId) {
-		this.lessonId = lessonId;
-	}
-
 	public HobbyClass getHobbyClass() {
 		return hobbyClass;
 	}
@@ -80,13 +74,40 @@ public class Lesson {
 	public void setLessonVideo(String lessonVideo) {
 		this.lessonVideo = lessonVideo;
 	}
+	
+	public int getLessonNo() {
+		return lessonNo;
+	}
+
+	public void setLessonNo(int lessonNo) {
+		this.lessonNo = lessonNo;
+	}
+
+	public int getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
+	}
+
+	public int getCurrentCount() {
+		return currentCount;
+	}
+
+	public void setCurrentCount(int currentCount) {
+		this.currentCount = currentCount;
+	}
 
 	@Override
 	public String toString() {
-		return "Lesson [lessonId=" + lessonId + ", hobbyClass=" + hobbyClass + ", lessonTitle=" + lessonTitle
+		return "Lesson [lessonNo=" + lessonNo + ", hobbyClass=" + hobbyClass + ", lessonTitle=" + lessonTitle
 				+ ", lessonImage=" + lessonImage + ", lessonIntro=" + lessonIntro + ", lessonContent=" + lessonContent
-				+ ", lessonProject=" + lessonProject + ", lessonVideo=" + lessonVideo + "]";
+				+ ", lessonProject=" + lessonProject + ", lessonVideo=" + lessonVideo + ", totalCount=" + totalCount
+				+ ", currentCount=" + currentCount + "]";
 	}
+
+	
 	
 	
 	
