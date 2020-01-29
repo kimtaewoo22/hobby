@@ -53,7 +53,7 @@ public class Search {
 	}
 
 	public int getEndRowNum() {
-		return endRowNum;
+		return getCurrentPage()*getPageSize();
 	}
 
 	public void setEndRowNum(int endRowNum) {
@@ -61,7 +61,7 @@ public class Search {
 	}
 
 	public int getStartRowNum() {
-		return startRowNum;
+		return (getCurrentPage()-1)*getPageSize()+1;
 	}
 
 	public void setStartRowNum(int startRowNum) {

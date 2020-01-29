@@ -1,9 +1,281 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE mapper
 		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="HobbyClassMapper">
+ 	
+ 	
+	<resultMap id="hobbyclassSelectMap" type="hobbyclass">
+		<result property="hobbyClassNo" 		column="CLASS_NO" 		jdbcType="NUMERIC" />
+		<result property="user.userId" 			column="USER_ID" 		jdbcType="VARCHAR" />
+		<result property="user.nickName" 		column="NICKNAME" 		jdbcType="VARCHAR" />
+		<result property="hobbyClassName" 		column="CLASS_TITLE" 	jdbcType="VARCHAR" />
+		<result property="hobbyClassImage" 		column="CLASS_IMAGE" 	jdbcType="VARCHAR" />
+		<result property="hobbyClassIntro" 		column="CLASS_INTRO" 	jdbcType="CLOB" />
+		<result property="hobbyClassPrice" 		column="CLASS_PRICE" 	jdbcType="NUMERIC" />
+		<result property="kitName" 				column="KIT_NAME" 		jdbcType="VARCHAR" />
+		<result property="kitImage" 			column="KIT_IMAGE" 		jdbcType="VARCHAR" />
+		<result property="kitPrice" 			column="KIT_PRICE" 		jdbcType="NUMERIC" />
+		<result property="kitIntro" 		    column="KIT_INTRO" 		jdbcType="VARCHAR" />
+		<result property="startDate" 			column="START_DATE" 	jdbcType="DATE" />
+		<result property="endDate" 				column="END_DATE" 		jdbcType="DATE" />
+		<result property="category" 			column="CATEGORY" 		jdbcType="CHAR" />
+		<result property="hashtag" 				column="HASHTAG_CODE" 	jdbcType="CHAR" />
+		<result property="lessonTotalCount" 	column="TOTAL_LESSON" 	jdbcType="NUMERIC" />
+		<result property="hobbyClassPersonnel" 	column="TOTAL_STUDENT" 	jdbcType="NUMERIC" />
+		<result property="hobbyClassState" 		column="CLASS_STATE" 	jdbcType="CHAR" />
+		<result property="totalMoney" 			column="TOTAL_MONEY" 	jdbcType="NUMERIC" />
+		<result property="steamCount" 			column="TOTAL_STEAM" 	jdbcType="NUMERIC" />
+		<result property="totalGrade" 			column="TOTAL_GRADE" 	jdbcType="NUMERIC" />
+	</resultMap>
+	
+	<resultMap id="lessonSelectMap" type="lesson">
+		<result property="lessonNo" 				column="LESSON_NO" 		jdbcType="NUMERIC" />
+		<result property="hobbyClass.hobbyClassId" 	column="CLASS_NO" 		jdbcType="NUMERIC" />
+		<result property="lessonTitle" 				column="LESSON_TITLE" 	jdbcType="VARCHAR" />
+		<result property="lessonImage" 				column="LESSON_IMAGE" 	jdbcType="VARCHAR" />
+		<result property="lessonIntro" 				column="LESSON_INTRO" 	jdbcType="VARCHAR" />
+		<result property="lessonContent" 			column="LESSON_CONTENT" jdbcType="CLOB" />
+		<result property="lessonProject" 			column="LESSON_PROJECT" jdbcType="VARCHAR" />
+		<result property="lessonVideo" 				column="LESSON_VIDEO"	jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="getHobbyClassList" parameterType="search" resultMap="hobbyclassSelectMap">
+		SELECT *
+	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+	  					FROM		(	SELECT CLASS_NO, CLASS_TITLE, CLASS_IMAGE, CLASS_STATE
+										FROM HOBBYCLASS
+										WHERE USER_ID = #{searchKeyword}
+										ORDER BY CLASS_NO DESC	) inner_table
+						WHERE ROWNUM &lt;= #{endRowNum} )
+		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
+	</select>
+	
+	<insert id="addHobbyClass" parameterType="string">
+		INSERT INTO HOBBYCLASS ( CLASS_NO, USER_ID, CLASS_STATE )
+		VALUES ( seq_hobbyclass_class_no.nextval, #{userId}, 0 )
+	</insert>
+	
+	<delete id="deleteHobbyClass" parameterType="int">
+		DELETE FROM HOBBYCLASS
+		WHERE CLASS_NO = #{hobbyClassNo}
+	</delete>
+	
+	<select id="getHobbyClass" parameterType="map" resultMap="hobbyclassSelectMap">
+		SELECT CLASS_NO  
+		<if test="what == '510'">
+			, CLASS_TITLE, CLASS_IMAGE, CLASS_INTRO, CLASS_PRICE, CATEGORY
+		</if>
+		<if test="what == '520'">
+			, TOTAL_LESSON
+		</if>
+		<if test="what == '530'">
+			, KIT_NAME, KIT_PRICE, KIT_IMAGE, KIT_INTRO
+		</if>
+		FROM HOBBYCLASS
+		WHERE CLASS_NO = #{hobbyClassNo}
+	</select>
+	
+	<update id="saveHobbyClassInfo" parameterType="hobbyclass">
+		UPDATE HOBBYCLASS
+		<set>
+			CLASS_TITLE = #{hobbyClassName},
+			CATEGORY = #{category},
+			CLASS_PRICE = #{hobbyClassPrice},
+			CLASS_IMAGE = #{hobbyClassImage},
+			CLASS_INTRO	 = #{hobbyClassIntro},
+		</set>
+		WHERE CLASS_NO = #{hobbyClassId}
+	</update>
+	
+	<update id="saveKit" parameterType="hobbyclass">
+		UPDATE HOBBYCLASS
+		<set>
+			KIT_NAME = #{kitName},
+			KIT_PRICE = #{kitPrice},
+			KIT_IMAGE = #{kitImage},
+			KIT_INTRO = #{kitIntro},
+		</set>
+		WHERE CLASS_NO = #{hobbyClassNo}
+	</update>
+		 
+	<update id="saveCheckHobbyClass" parameterType="int">
+		UPDATE HOBBYCLASS
+		<set>
+			CLASS_STATE = 1
+		</set>
+		WHERE CLASS_NO = #{hobbyClassNo}
+	</update>
+	
+	<select id="getPreview" parameterType="map" resultMap="hobbyclassSelectMap">
+		SELECT h.CLASS_NO,
+		<if test="what == '510'">
+			h.CLASS_TITLE, h.CLASS_IMAGE, h.CLASS_INTRO, h.CLASS_PRICE, h.CATEGORY, h.USER_ID, h.TOTAL_STUDENT, h.TOTAL_LESSON, u.NICKNAME
+		</if>
+		<if test="what == '520'">
+			h.TOTAL_LESSON
+		</if>
+		<if test="what == '530'">
+			h.KIT_NAME, h.KIT_PRICE, h.KIT_IMAGE, h.KIT_INTRO
+		</if>
+		FROM HOBBYCLASS h
+		<if test="what == '510'">
+			, USERS u
+		</if>
+		WHERE h.CLASS_NO = #{hobbyClassNo}
+		<if test="what == '510'">
+			AND h.USER_ID = u.USER_ID
+		</if>
+	</select>
+	
+	<update id="saveLesson" parameterType="hobbyclass">
+		UPDATE LESSON
+		<set>
+			LESSON_TITLE = #{lessonTitle},
+			LESSON_IMAGE = #{lessonImage},
+			LESSON_INTRO = #{lessonIntro},
+			LESSON_CONTENT = #{lessonContent},
+			LESSON_PROJECT = #{lessonProject},
+			LESSON_VIDEO = #{lessonVideo},
+		</set>
+		WHERE LESSON_NO = #{lessonNo}
+	</update>
 
+	<select id="getLesson" parameterType="int" resultMap="lessonSelectMap">
+		SELECT LESSON_NO, CLASS_NO, LESSON_TITLE, LESSON_IMAGE, LESSON_INTRO, LESSON_CONTENT, LESSON_PROJECT
+		FROM LESSON
+		WHERE LESSON_NO = #{lessonNo}
+	</select>
+	
+	<select id="getLessonList" parameterType="int" resultMap="lessonSelectMap">
+		SELECT LESSON_NO, CLASS_NO, LESSON_TITLE, LESSON_IMAGE, LESSON_INTRO, LESSON_CONTENT, LESSON_PROJECT
+		FROM LESSON
+		WHERE CLASS_NO = #{hobbyClassNo}
+	</select>
+	
+	<insert id="addLesson" parameterType="int">
+		INSERT INTO LESSON ( LESSON_NO, CLASS_NO )
+		VALUES ( seq_lesson_lesson_no.nextval, #{hobbyClassNo} )
+	</insert>
+	
+	<delete id="deleteLesson" parameterType="int">
+		DELETE FROM LESSON
+		WHERE LESSON_NO = #{lessonNo}
+	</delete>
+	
+	<insert id="addHashtag" parameterType="map">
+		INSERT INTO HASHTAG
+		VALUES ( seq_hashtag_hashtag_no.nextval, #{hobbyClassId}, #{userId}, #{hashtag} )
+	</insert>
+	
+	<select id="getHashtag" parameterType="int" resultType="string">
+		SELECT HASHTAG_CODE
+		FROM HASHTAG
+		WHERE CLASS_NO = #{hobbyClassNo}
+	</select>
+	
+	<update id="updateTotalMoney" parameterType="map">
+		UPDATE HOBBYCLASS
+		<set>
+			TOTAL_MONEY = #{totalMoney}
+		</set>
+		WHERE CLASS_NO = #{hobbyClassNo}
+	</update>
+	
+	<update id="updateTotalStudent" parameterType="map">
+		UPDATE HOBBYCLASS
+		<set>
+			TOTAL_STUDENT = #{totalStudent}
+		</set>
+		WHERE CLASS_NO = #{hobbyClassNo}
+	</update>
+	
+	<update id="updateTotalLesson" parameterType="map">
+		UPDATE HOBBYCLASS
+		<set>
+			TOTAL_LESSON = #{totalLesson}
+		</set>
+		WHERE CLASS_NO = #{hobbyClassNo}
+	</update>
+	
+	<select id="getTotalMoney" parameterType="int" resultType="int">
+		SELECT SUM(PRICE) TOTAL_MONEY
+		FROM PURCHASE
+		WHERE CLASS_NO = #{hobbyClassNo}
+		AND PURCHASE_CODE = '0'
+	</select>
+	
+	<select id="getTotalStudent" parameterType="int" resultType="int">
+		SELECT COUNT(CLASS_NO)
+		FROM PURCHASE
+		WHERE CLASS_NO = #{hobbyClassNo}
+		AND PURCHASE_CODE = '0'
+	</select>
+	
+	<select id="getTotalLesson" parameterType="int" resultType="int">
+		SELECT COUNT(CLASS_NO)
+		FROM LESSON
+		WHERE CLASS_NO = #{hobbyClassNo}
+	</select>
+	
+	
+	
+	<select id="getHobbyClassListAdmin" parameterType="map" resultMap="hobbyclassSelectMap">
+		SELECT CLASS_NO, USER_ID, CLASS_IMAGE, CLASS_TITLE, TOTAL_STEAM, TOTAL_MONEY, CLASS_STATE, TOTAL_STUDENT, TOTAL_GRADE 
+		FROM HOBBYCLASS 
+		 
+			<if test="what == 501">
+				WHERE CLASS_STATE = 0
+			</if>
+			<if test="what == 502">
+				WHERE CLASS_STATE = 1
+			</if>
+			<if test="what == 503">
+				WHERE CLASS_STATE = 2
+			</if>
+			<if test="what == 504">
+				WHERE CLASS_STATE = 3
+			</if>
+			<if test="what == 505">
+				WHERE CLASS_STATE = 4
+			</if>
+			<if test="what == 506">
+				WHERE CLASS_STATE = 5
+			</if>
+			<if test="what == 507">
+				WHERE CLASS_STATE = 6
+			</if>
+			<if test="what == 508">
+				WHERE CLASS_STATE = 7
+			</if>
+			<if test="what == 900">
+			
+			</if>
+		<if test="what == 101">
+		ORDER BY USER_ID
+		</if>
+		<if test="what == 102">
+		ORDER BY CLASS_NO
+		</if>
+	</select>
+	
+	<update id="saveCheckHobbyClassAdmin" parameterType="int">
+		UPDATE HOBBYCLASS
+		<set>
+			CLASS_STATE = 2
+		</set>
+		WHERE CLASS_NO = #{hobbyClassNo}
+	</update>
+	
+	<update id="updateHobbyClassAdmin" parameterType="hobbyclass">
+		UPDATE HOBBYCLASS
+		<set>
+			
+		</set>
+		WHERE CLASS_NO = #{hobbyClassNo}
+	</update>
+	
+	
 </mapper>

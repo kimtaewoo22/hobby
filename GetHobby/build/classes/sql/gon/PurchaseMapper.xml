@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <!DOCTYPE mapper
 		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
@@ -6,4 +6,191 @@
 
 <mapper namespace="PurchaseMapper">
  	
+ 	
+	<resultMap id="purchaseSelectMap" type="purchase">
+		<result property="purchaseId" 				column="PURCHASE_ID" 		jdbcType="VARCHAR" />
+		<result property="user.userId" 				column="USER_ID" 			jdbcType="VARCHAR" />
+		<result property="hobbyClass.hobbyClassNo" 	column="CLASS_NO" 			jdbcType="NUMERIC" />
+		<result property="dlvyCompany" 				column="DLVY_COMPANY" 		jdbcType="VARCHAR" />
+		<result property="trackingNo" 				column="TRACKING_NO" 		jdbcType="VARCHAR" />
+		<result property="receiverName" 			column="RECEIVER_NAME" 		jdbcType="VARCHAR" />
+		<result property="receiverPhone" 			column="PHONE" 				jdbcType="VARCHAR" />
+		<result property="dlvyAddr" 				column="ADDRESS" 			jdbcType="VARCHAR" />
+		<result property="dlvyDetailAddr" 			column="DETAIL_ADDRESS" 	jdbcType="VARCHAR" />
+		<result property="dlvyPostcode" 			column="POSTCODE" 			jdbcType="VARCHAR" />
+		<result property="dlvyRequest" 				column="DLVY_REQUEST" 		jdbcType="VARCHAR" />
+		<result property="purchasePrice" 			column="PRICE" 				jdbcType="NUMERIC" />
+		<result property="payMethod" 				column="PAY_METHOD" 		jdbcType="CHAR" />
+		<result property="purchaseState" 			column="PURCHASE_CODE" 		jdbcType="CHAR" />
+		<result property="purchaseDate" 			column="PURCHASE_DATE" 		jdbcType="DATE" />
+		<result property="refundDate" 				column="REFUND_DATE" 		jdbcType="DATE" />
+		<result property="componentOption" 			column="COMPONENT_OPTION" 	jdbcType="CHAR" />
+	</resultMap>
+
+	<resultMap id="hobbyclassSelectMap" type="hobbyclass">
+		<result property="hobbyClassNo" 		column="CLASS_NO" 		jdbcType="NUMERIC" />
+		<result property="user.userId" 			column="USER_ID" 		jdbcType="VARCHAR" />
+		<result property="hobbyClassName" 		column="CLASS_TITLE" 	jdbcType="VARCHAR" />
+		<result property="hobbyClassImage" 		column="CLASS_IMAGE" 	jdbcType="VARCHAR" />
+		<result property="hobbyClassIntro" 		column="CLASS_INTRO" 	jdbcType="CLOB" />
+		<result property="hobbyClassPrice" 		column="CLASS_PRICE" 	jdbcType="NUMERIC" />
+		<result property="kitName" 				column="KIT_NAME" 		jdbcType="VARCHAR" />
+		<result property="kitImage" 			column="KIT_IMAGE" 		jdbcType="VARCHAR" />
+		<result property="kitPrice" 			column="KIT_PRICE" 		jdbcType="NUMERIC" />
+		<result property="kitIntro" 		    column="KIT_INTRO" 		jdbcType="VARCHAR" />
+		<result property="startDate" 			column="START_DATE" 	jdbcType="DATE" />
+		<result property="endDate" 				column="END_DATE" 		jdbcType="DATE" />
+		<result property="category" 			column="CATEGORY" 		jdbcType="CHAR" />
+		<result property="hashtag" 				column="HASHTAG_CODE" 	jdbcType="CHAR" />
+		<result property="lessonTotalCount" 	column="TOTAL_LESSON" 	jdbcType="NUMERIC" />
+		<result property="hobbyClassPersonnel" 	column="TOTAL_STUDENT" 	jdbcType="NUMERIC" />
+		<result property="hobbyClassState" 		column="CLASS_STATE" 	jdbcType="CHAR" />
+		<result property="totalMoney" 			column="TOTAL_MONEY" 	jdbcType="NUMERIC" />
+		<result property="steamCount" 			column="TOTAL_STEAM" 	jdbcType="NUMERIC" />
+		<result property="totalGrade" 			column="TOTAL_GRADE" 	jdbcType="NUMERIC" />
+	</resultMap>
+
+	<select id="getComponentOption" parameterType="int" resultMap="hobbyclassSelectMap">
+		SELECT CLASS_NO, CLASS_PRICE, KIT_PRICE, KIT_NAME, CLASS_TITLE
+		FROM HOBBYCLASS
+		WHERE CLASS_NO = #{hobbyClassNo}
+	</select>
+	
+	<select id="getPayment" parameterType="string" resultMap="purchaseSelectMap">
+		SELECT USER_ID, PHONE, ADDRESS, DETAIL_ADDRESS, POSTCODE
+		FROM USERS
+		WHERE USER_ID = #{userId}
+	</select>
+	
+	<insert id="addPayment" parameterType="purchase">
+		INSERT INTO PURCHASE ( PURCHASE_ID, USER_ID, CLASS_NO, COMPONENT_OPTION, PAY_METHOD, PRICE, PURCHASE_CODE, RECEIVER_NAME, PHONE, ADDRESS, DETAIL_ADDRESS, POSTCODE, DLVY_REQUEST, PURCHASE_DATE )
+		VALUES ( #{purchaseId}, #{user.userId}, #{hobbyClass.hobbyClassNo}, #{componentOption}, #{payMethod}, #{purchasePrice}, 0, #{receiverName}, #{receiverPhone}, #{dlvyAddr}, #{dlvyDetailAddr}, #{dlvyPostcode}, #{dlvyRequest}, SYSDATE )
+	</insert>
+	
+	<select id="getPaymentHistoryList" parameterType="string" resultMap="purchaseSelectMap">
+		SELECT PURCHASE_ID, PURCHASE_CODE, PRICE, COMPONENT_OPTION, CLASS_NO
+		FROM PURCHASE
+		WHERE USER_ID = #{userId}
+	</select>
+	
+	<select id="getDelivery" parameterType="string" resultMap="purchaseSelectMap">
+		SELECT ROWNUM no, search_data.*
+		FROM (
+			SELECT PURCHASE_ID, USER_ID, CLASS_NO, RECEIVER_NAME, PHONE, ADDRESS, DETAIL_ADDRESS, POSTCODE
+			FROM PURCHASE
+			WHERE USER_ID = #{userId}
+			ORDER BY PURCHASE_DATE DESC ) search_data
+		WHERE ROWNUM = 1
+	</select>
+
+	<update id="requestRefund" parameterType="string">
+		UPDATE PURCHASE
+		<set>
+			PURCHASE_CODE = 1
+		</set>
+		WHERE PURCHASE_ID = #{purchaseId}
+	</update>
+	
+	<select id="getPaymentHistoryListAdmin" parameterType="search" resultMap="purchaseSelectMap">
+		SELECT PURCHASE_ID, USER_ID, PRICE, PAY_METHOD, COMPONENT_OPTION, PURCHASE_CODE
+		FROM PURCHASE
+		<if test="what == '101'">
+			USER_ID = #{userId}
+		</if>
+		<if test="what == '102'">
+			CLASS_NO = #{hobbyClassNo}
+		</if>
+		<if test="what == '103'">
+			PURCHASE_ID = #{purchaseId}
+		</if>
+		
+	</select>
+	
+	<update id="updateRefund" parameterType="string">
+		UPDATE PURCHASE
+		<set>
+			PURCHASE_CODE = 2
+		</set>
+		WHERE PURCHASE_ID = #{purchaseId}
+	</update>
+	
+	<update id="addDeliveryInfo" parameterType="purchase">
+		UPDATE PURCHASE
+		<set>
+			DLVY_COMPANY = #{dlvyCompany},
+			TRACKING_NO = #{trackingNo}
+		</set>
+		WHERE PURCHASE_ID = #{purchaseId}
+	</update>
+	
+	<select id="getMoneyAnalysisSum" parameterType="map" resultType="int">
+		SELECT SUM(PRICE) 
+		FROM PURCHASE p
+		<if test="what == '800'">
+			, (SELECT CLASS_NO , USER_ID
+				FROM HOBBYCLASS 
+				WHERE CATEGORY = #{keyWord}) h
+		</if>
+		WHERE 
+		<if test="what == '100'">
+			p.USER_ID = #{keyWord}
+		</if>
+		<if test="what == '500'">
+			p.CLASS_NO = #{keyWord}
+		</if>
+		<if test="what == '800'">
+			p.CLASS_NO = h.CLASS_NO
+			AND p.USER_ID = h.USER_ID
+		</if>
+	</select>
+	
+	<select id="getMoneyAnalysisAvg" parameterType="map" resultType="int">
+		SELECT AVG(PRICE)
+		FROM PURCHASE p
+		<if test="what == '800'">
+			, (SELECT CLASS_NO , USER_ID
+				FROM HOBBYCLASS 
+				WHERE CATEGORY = #{keyWord}) h
+		</if>
+		WHERE 
+		<if test="what == '100'">
+			p.USER_ID = #{keyWord}
+		</if>
+		<if test="what == '500'">
+			p.CLASS_NO = #{keyWord}
+		</if>
+		<if test="what == '800'">
+			p.CLASS_NO = h.CLASS_NO
+			AND p.USER_ID = h.USER_ID
+		</if>
+	</select>
+	
+	<select id="getMoneyAnalysisCount" parameterType="map" resultType="int">
+		SELECT COUNT(PRICE)
+		FROM PURCHASE p
+		<if test="what == '800'">
+			, (SELECT CLASS_NO , USER_ID
+				FROM HOBBYCLASS 
+				WHERE CATEGORY = #{keyWord}) h
+		</if>
+		WHERE 
+		<if test="what == '100'">
+			p.USER_ID = #{keyWord}
+		</if>
+		<if test="what == '500'">
+			p.CLASS_NO = #{keyWord}
+		</if>
+		<if test="what == '800'">
+			p.CLASS_NO = h.CLASS_NO
+			AND p.USER_ID = h.USER_ID
+		</if>
+	</select>
+	
+	<select id="getCreatorList" resultType="string">
+		SELECT USER_ID
+		FROM USERS
+		WHERE ROLE = 1
+	</select>
+	
+
 </mapper>
