@@ -5,5 +5,30 @@
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="FavorMapper">
+
+ 	<resultMap type="favor" id="favorSelectMap">
+ 		<result property="favorNo" column="favor_no" jdbcType="INTEGER"/>
+ 		<result property="article.articleNo" column="article_no" jdbcType="INTEGER"/>
+ 		<result property="user.userId" column="user_id" jdbcType="VARCHAR"/>
+ 	</resultMap>
  	
+ 	<insert id="addFavor" parameterType="favor">
+ 		<!-- INSERT INTO favor(favor_no, article_no, user_id)
+		VALUES(seq_favor_favor_no.NEXTVAL, #{article.articleNo}, #{user.userId})
+		
+		UPDATE article
+		SET total_favor = total_favor + 1
+		WHERE article_no = 3; -->
+		
+		<!--{ 	CALL
+				DECLARE
+				BEGIN
+				                INSERT INTO favor(favor_no, article_no, user_id)
+				                VALUES(seq_favor_favor_no.NEXTVAL, #{article.articleNo}, #{user.userId});
+				                UPDATE article
+				                SET total_favor = total_favor + 1
+				                WHERE article_no = #{article.articleNo};
+				END
+		}  -->
+ 	</insert>
 </mapper>
