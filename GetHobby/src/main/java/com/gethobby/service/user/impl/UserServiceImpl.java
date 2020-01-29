@@ -40,8 +40,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getUser(String userId) throws Exception {
-		return userDAO.getUser(userId);		
+	public Map<String, Object> getUser(String userId) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<String> list = new ArrayList<String>();	
+		list = userDAO.getUserHashtag(userId);
+		map.put("user", userDAO.getUser(userId));
+		map.put("list", list);
+		return map;		
 	}
 
 	@Override

@@ -15,6 +15,9 @@ public interface UserDAO {
 	//Select
 	public User getUser(String userId)throws Exception;
 	
+	//Select
+	public List<String> getUserHashtag(String userId)throws Exception;
+	
 	//Update
 	public void deleteUser(User user)throws Exception;
 	

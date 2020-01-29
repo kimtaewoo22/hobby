@@ -46,7 +46,12 @@
  		FROM users
  		WHERE user_id = #{value}
  	</select>
- 	
+ 	<select id="getUserHashtag" parameterType="String">
+ 		SELECT
+ 		hashtag_code 
+ 		FROM hashtag
+ 		WHERE user_id = #{value}
+ 	</select>
  	<update id="deleteUser" parameterType="user">
  		UPDATE users
  		<set>
