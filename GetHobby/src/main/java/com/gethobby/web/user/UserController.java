@@ -76,4 +76,9 @@ public class UserController {
 		
 		return null;
 	}
+	@RequestMapping(value="mypageUser", method = RequestMethod.GET)
+	public String mypageUser() throws Exception{
+		
+		return "foward:/mypageUser.jsp";
+	}
 }

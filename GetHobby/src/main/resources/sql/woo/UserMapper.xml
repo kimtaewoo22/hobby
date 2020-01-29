@@ -20,7 +20,7 @@
  		<result property="role"			column="role"			jdbcType="CHAR"/>
  		<result property="profileImage"		column="profile_image"		jdbcType="VARCHAR"/>
  		<result property="totalReport"		column="total_report"		jdbcType="INTEGER"/>
- 		<result property="retireMessage"		column="reason_code"		jdbcType="CHAR"/>
+ 		<result property="reasonCode"		column="reason_code"		jdbcType="CHAR"/>
  		<result property="retireDate"		column="retire_date"		jdbcType="DATE"/>
  		<result property="stopDate"		column="stop_date"			jdbcType="DATE"/>
  		<result property="addDate"		column="add_date"			jdbcType="DATE"/> 	
@@ -46,7 +46,7 @@
  		FROM users
  		WHERE user_id = #{value}
  	</select>
- 	<select id="getUserHashtag" parameterType="String">
+ 	<select id="getUserHashtag" parameterType="String" resultType="String">
  		SELECT
  		hashtag_code 
  		FROM hashtag
@@ -55,7 +55,9 @@
  	<update id="deleteUser" parameterType="user">
  		UPDATE users
  		<set>
- 		role = #{role}
+ 		role = #{role},
+ 		reason_code = #{reasonCode},
+ 		retire_date = SYSDATE
  		</set>
  		WHERE user_id = #{userId}
  	</update>
@@ -72,6 +74,12 @@
  		</set>
  		WHERE user_id = #{userId}
  	</update>
+ 	
+ 	
+ 	<delete id="deleteHashtag" parameterType="String">
+ 		DELETE hashtag
+ 		WHERE user_id = #{value} 	
+ 	</delete>
  	
  	<update id="changeUserCreator" parameterType="user">
  		UPDATE users
@@ -123,4 +131,13 @@
 		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}  -->
  	
  	</select>
+ 	
+ 	<update id="updateNewPassword"	parameterType="user">
+ 		UPDATE users
+ 		<set>
+ 		password = #{password}
+ 		</set>
+ 		WHERE user_id = #{userId}
+ 	
+ 	</update>
 </mapper>

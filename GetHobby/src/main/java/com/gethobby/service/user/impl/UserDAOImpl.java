@@ -1,5 +1,6 @@
 package com.gethobby.service.user.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.gethobby.common.Search;
+import com.gethobby.service.domain.Article;
 import com.gethobby.service.domain.User;
 import com.gethobby.service.user.UserDAO;
 
@@ -77,5 +79,45 @@ public class UserDAOImpl implements UserDAO {
 		return sqlSession.selectList("UserMapper.getUserHashtag",userId);
 	}
 
+	@Override
+	public void updateNewPassword(User user) throws Exception {
+		sqlSession.update("UserMapper.updateNewPassword",user);
+	}
 
+	@Override
+	public void updateHashtag(Map<String, Object> map) throws Exception {
+		User user = new User();
+		user = (User)map.get("user");
+		sqlSession.delete("UserMapper.deleteHashtag",user.getUserId());
+		
+		map.put("userId", user.getUserId());	
+		
+		List<String> list = new ArrayList<String>();
+		list = (List)map.get("list");
+		for (int i = 0; i < list.size(); i++) {
+			map.put("hashCode", list.get(i));
+			sqlSession.insert("UserMapper.addHashtag", map);
+		}				
+		
+	}
+
+	@Override
+	public void addNotice(Article article) throws Exception {
+		sqlSession.insert("NoticeMapper.addNotice",article);
+	}
+
+	@Override
+	public Article getNotice(int articleNo) throws Exception {
+		return sqlSession.selectOne("NoticeMapper.getNotice",articleNo);
+	}
+
+	@Override
+	public void updateNotice(Article article) throws Exception {
+		sqlSession.update("NoticeMapper.updateNotice",article);
+	}
+
+	@Override
+	public List<Article> getNoticeList(Search search) throws Exception {
+		return sqlSession.selectList("NoticeMapper.getNoticeList",search);
+	}
 }

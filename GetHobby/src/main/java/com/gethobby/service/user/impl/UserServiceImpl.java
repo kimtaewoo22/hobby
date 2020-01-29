@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.gethobby.common.Search;
+import com.gethobby.service.domain.Article;
 import com.gethobby.service.domain.User;
 import com.gethobby.service.user.UserDAO;
 import com.gethobby.service.user.UserService;
 
 
-//ȸ�� ���� ���� ����
 @Service("userServiceImpl")
 public class UserServiceImpl implements UserService {
 	
@@ -31,8 +31,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void addUser(Map	map) throws Exception {
-		
+	public void addUser(Map	map) throws Exception {		
 			
 		userDAO.addUser((User)map.get("user"));
 		userDAO.addHashtag(map);
@@ -42,10 +41,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Map<String, Object> getUser(String userId) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<String> list = new ArrayList<String>();	
-		list = userDAO.getUserHashtag(userId);
 		map.put("user", userDAO.getUser(userId));
-		map.put("list", list);
+		map.put("list", userDAO.getUserHashtag(userId));
 		return map;		
 	}
 
@@ -56,8 +53,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateUser(User user) throws Exception {
-		userDAO.updateUser(user);
+	public void updateUser(Map<String, Object> map) throws Exception {
+		userDAO.updateUser((User)map.get("user"));
+		userDAO.updateHashtag(map);
+		
 	}
 
 	@Override
@@ -82,11 +81,31 @@ public class UserServiceImpl implements UserService {
 		map.put("list", list);
 		return map;
 	}
-	
-	
 
+	@Override
+	public void updateNewPassword(User user) throws Exception {
+		userDAO.updateNewPassword(user);
+	}
 
+	@Override
+	public void addNotice(Article article) throws Exception {
+		userDAO.addNotice(article);
+	}
 
-	
+	@Override
+	public Article getNotice(int articleNo) throws Exception {
+		return userDAO.getNotice(articleNo);
+	}
+
+	@Override
+	public void updateNotice(Article article) throws Exception {
+		userDAO.updateNotice(article);
+	}
+
+	@Override
+	public List<Article> getNoticeList(Search search) throws Exception {
+		return userDAO.getNoticeList(search);
+	}
+
 
 }

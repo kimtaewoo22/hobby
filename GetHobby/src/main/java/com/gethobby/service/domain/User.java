@@ -20,8 +20,7 @@ public class User {
 	private String postCode;
 	private String address;
 	private String detailAddress;
-	private String retireMessage;
-	private String stopReason;
+	private String reasonCode;
 	private Date retireDate;
 	private Date stopDate;
 	private Date addDate;
@@ -137,20 +136,12 @@ public class User {
 		this.detailAddress = detailAddress;
 	}
 
-	public String getReitreMessage() {
-		return retireMessage;
+	public String getReasonCode() {
+		return reasonCode;
 	}
 
-	public void setReitreMessage(String reitreMessage) {
-		this.retireMessage = reitreMessage;
-	}
-
-	public String getStopReason() {
-		return stopReason;
-	}
-
-	public void setStopReason(String stopReason) {
-		this.stopReason = stopReason;
+	public void setReasonCode(String reasonCode) {
+		this.reasonCode = reasonCode;
 	}
 
 	public Date getRetireDate() {
@@ -177,15 +168,16 @@ public class User {
 		this.addDate = addDate;
 	}
 
-
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", sex=" + sex + ", role=" + role + ", phone=" + phone + ", name=" + name
 				+ ", profileImage=" + profileImage + ", totalReport=" + totalReport + ", birth=" + birth + ", password="
 				+ password + ", rePassword=" + rePassword + ", beforePassword=" + beforePassword + ", nickName="
 				+ nickName + ", postCode=" + postCode + ", address=" + address + ", detailAddress=" + detailAddress
-				+ ", reitreMessage=" + retireMessage + ", stopReason=" + stopReason + ", retireDate=" + retireDate
-				+ ", stopDate=" + stopDate + ", addDate=" + addDate + "]";
-	}	
+				+ ", reasonCode=" + reasonCode + ", retireDate=" + retireDate + ", stopDate=" + stopDate + ", addDate="
+				+ addDate + "]";
+	}
+
+
 	
 }

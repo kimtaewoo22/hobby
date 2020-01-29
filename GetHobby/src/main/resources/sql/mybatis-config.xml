@@ -32,6 +32,7 @@
   
 	<mappers>
 		<mapper resource="sql/woo/UserMapper.xml"/>
+		<mapper resource="sql/woo/NoticeMapper.xml"/>
 		<mapper resource="sql/gon/HobbyClassMapper.xml"/>
 		<mapper resource="sql/gon/LessonMapper.xml"/>
 		<mapper resource="sql/gon/PurchaseMapper.xml"/>
