@@ -2,6 +2,7 @@ package com.gethobby.service.domain;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 public class HobbyClass {
 
@@ -9,6 +10,7 @@ public class HobbyClass {
 	private int hobbyClassNo;
 	private User user;
 	private Event event;
+	private List<Lesson> lesson;
 	private String hobbyClassName;
 	private String hobbyClassImage;
 	private String hobbyClassIntro;
@@ -29,6 +31,7 @@ public class HobbyClass {
 	private int steamCount;
 	private double totalGrade;
 	private String steamCheck;
+	private List tempFile;
 	
 	/// Constructor
 	public HobbyClass() {
@@ -59,6 +62,14 @@ public class HobbyClass {
 		this.event = event;
 	}
 	
+	public List<Lesson> getLesson() {
+		return lesson;
+	}
+
+	public void setLesson(List<Lesson> lesson) {
+		this.lesson = lesson;
+	}
+
 	public String getHobbyClassName() {
 		return hobbyClassName;
 	}
@@ -212,8 +223,6 @@ public class HobbyClass {
 		this.steamCheck = steamCheck;
 	}
 	
-	
-
 	public double getTotalGrade() {
 		return totalGrade;
 	}
@@ -221,6 +230,15 @@ public class HobbyClass {
 	public void setTotalGrade(double totalGrade) {
 		this.totalGrade = totalGrade;
 	}
+
+	public List getTempFile() {
+		return tempFile;
+	}
+
+	public void setTempFile(List tempFile) {
+		this.tempFile = tempFile;
+	}
+	
 
 	@Override
 	public String toString() {
@@ -235,5 +253,4 @@ public class HobbyClass {
 	}
 	
 	
-	
-}
+}//end of Domain

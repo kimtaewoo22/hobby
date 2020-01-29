@@ -21,6 +21,7 @@ public class Purchase {
 	private Date purchaseDate;
 	private Date refundDate;
 	private String purchaseState;
+	private String componentOption;
 	
 	/// Constructor
 	public Purchase() {
@@ -154,6 +155,15 @@ public class Purchase {
 	public void setPurchaseState(String purchaseState) {
 		this.purchaseState = purchaseState;
 	}
+	
+	public String getComponentOption() {
+		return componentOption;
+	}
+
+	public void setComponentOption(String componentOption) {
+		this.componentOption = componentOption;
+	}
+	
 
 	@Override
 	public String toString() {
@@ -162,6 +172,6 @@ public class Purchase {
 				+ receiverPhone + ", dlvyAddr=" + dlvyAddr + ", dlvyDetailAddr=" + dlvyDetailAddr + ", dlvyPostcode="
 				+ dlvyPostcode + ", dlvyRequest=" + dlvyRequest + ", payMethod=" + payMethod + ", purchasePrice="
 				+ purchasePrice + ", purchaseDate=" + purchaseDate + ", refundDate=" + refundDate + ", purchaseState="
-				+ purchaseState + "]";
+				+ purchaseState + ",componentOption="+componentOption+"]";
 	}
 }

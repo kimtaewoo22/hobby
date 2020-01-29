@@ -1,5 +1,7 @@
 package com.gethobby.service.domain;
 
+import java.util.List;
+
 public class Lesson {
 	
 	/// Field
@@ -13,6 +15,7 @@ public class Lesson {
 	private String lessonVideo;
 	private int totalCount;
 	private int currentCount;
+	private List tempFile;
 	
 	/// Constructor 
 	public Lesson() {
@@ -98,6 +101,15 @@ public class Lesson {
 	public void setCurrentCount(int currentCount) {
 		this.currentCount = currentCount;
 	}
+	
+	public List getTempFile() {
+		return tempFile;
+	}
+
+	public void setTempFile(List tempFile) {
+		this.tempFile = tempFile;
+	}
+	
 
 	@Override
 	public String toString() {
