@@ -11,15 +11,14 @@ import com.gethobby.service.domain.LessonTimes;
 
 public interface SearchHobbyClassDAO {
 	public HobbyClass getHobbyClass(Map<String, Object> inputData) throws Exception; 
-	
-	// 쓸지 안쓸지 모름 hashtag만 뽑는거 테스트 
+ 
 	public List<String> getHobbyClassHashtag(int hobbyClassNo) throws Exception;
 	
 	public List<HobbyClass> getHobbyClassList(Map<String, Object> inputData) throws Exception;
 	
 	public List<ClassAssess> getHobbyClassAssessContent(Map<String, Object> inputData) throws Exception;
 	
-	public List<Lesson> getHobbyClassLessonContent(int hobbyClassNo) throws Exception;
+	public List<LessonTimes> getHobbyClassLessonContent(Map<String, Object> inputData) throws Exception;
 	
 	public List<LessonTimes> getLessonTimesList(Map<String, Object> inputData) throws Exception;
 	
@@ -31,4 +30,9 @@ public interface SearchHobbyClassDAO {
 	
 	public List<String> getUserSelectHashtag(String userId) throws Exception;
 	
+	public int getHobbyClassAssessContentTotalCount(Map<String, Object> inputData) throws Exception;
+	
+	public int getHobbyClassListTotalCount(Map<String, Object> inputData) throws Exception;
+	
+	public int getPopularHobbyClassListTotalCount(Map<String, Object> inputData) throws Exception;
 }
