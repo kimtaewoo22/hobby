@@ -114,4 +114,10 @@ public class MyHobbyClassServiceImpl implements MyHobbyClassService {
 		myHobbyClassDAO.deleteSteamHobbyClass(inputData);
 		myHobbyClassDAO.updateHobbyClassSteam(inputData);
 	}
+
+	@Override
+	public List<HobbyClass> getRecommendHobbyClassList(Map<String, Object> inputData) throws Exception {
+		return myHobbyClassDAO.getRecommendHobbyClassList(inputData);
+	}
+
 }

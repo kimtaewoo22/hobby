@@ -20,4 +20,6 @@ public interface MyHobbyClassDAO {
 	public void updateHobbyClassSteam(Map<String, Object> inputData) throws Exception;
 	
 	public void deleteSteamHobbyClass(Map<String, Object> inputData) throws Exception;
+	
+	public List<HobbyClass> getRecommendHobbyClassList(Map<String, Object> inputData) throws Exception;
 }

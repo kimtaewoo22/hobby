@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,34 +38,59 @@ public class EventServiceTest {
 		// TODO Auto-generated constructor stub
 	}
 	
-	@Test
-	public void addEventAdmin()throws Exception{
+	//@Test
+	public void testaddEventAdmin()throws Exception{
 		
 		Event event = new Event();
-		event.setEventTitle("2020이벤트");
-		event.setEventStartDate( Date.valueOf("2020-01-01")); //DATE 타입
-		Date startDate = Date.valueOf("2020-01-01");
-		System.out.println("startDate: "+startDate);
-		event.setEventEndDate( Date.valueOf("2020-01-31")); //DATE 타입
-		//Date endDate = Date.valueOf("2020-01-01");
-		System.out.println( Date.valueOf("2020-01-01"));
-		event.setEventContent("이벤트 내용입니다. 1월 동안 진행됩니다.");
+		event.setEventTitle("이벤트Test"); // 검색할 떄 이벤트 이름으로 찾으므로 Unique 할 수 있도록 
+		event.setEventStartDate( Date.valueOf("2020-02-10")); //DATE 타입
+		//Date startDate = Date.valueOf("2020-02-10");
+		System.out.println("startDate: "+event.getEventStartDate());
+		System.out.println(Date.valueOf("2020-02-10"));
+		event.setEventEndDate( Date.valueOf("2020-02-29")); //DATE 타입
+		//Date endDate = Date.valueOf("2020-02-29");
+		System.out.println("endDate: "+event.getEventEndDate());
+		event.setEventContent("이벤트 내용입니다.내용~~~~~");
+		event.setEventDiscount(10);
+		event.setEventImage("fff.jpg");
+	
 		
 		List<String> list = new ArrayList<String>();
 		
 //		for (int i = 0; i < 6 ; i++) {
 //			list.add(i, selectedCategory);
 //		}
-		list.add(0, "exercise");
-		list.add(1, "music");
+		list.add(0, "e"); //exercise
+		list.add(1, "m"); //music
+		list.add(2, "h"); //handcraft
+		list.add(3, "c"); //cook
 		
-		event.setCategory(list); //운동 카테고리
+		event.setCategory(list); //
 		
 		System.out.println("\n"+event);
 		
 		eventService.addEventAdmin(event);
 		
+		System.out.println("성공");
+		
 	}
+	
+	@Test
+	public void testGetEvent()throws Exception{
+		
+		Event event = new Event();
+		//event.setEventTitle("이벤트Test"); //찾으려는 이벤트 이름
+		
+		event = eventService.getEvent("이벤트Test");
+		
+		System.out.println("성공확인: "+event);
+		
+		Assert.assertEquals("fff.jpg", event.getEventImage());
+		//Assert.assertEquals("20-02-29", event.getEventStartDate());
+		
+		
+	}
+	
 	
 
 }

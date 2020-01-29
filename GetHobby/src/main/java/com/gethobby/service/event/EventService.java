@@ -12,7 +12,7 @@ public interface EventService {
 
 	public Map<String, Object>getEventList(Search search)throws Exception;
 	
-	public Event getEvent(int eventNo)throws Exception;
+	public Event getEvent(String eventTitle)throws Exception;
 	
 	public void addEventAdmin(Event event)throws Exception;
 	

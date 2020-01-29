@@ -51,7 +51,7 @@ public class SearchHobbyClassTest {
 	@Value("#{commonProperties['pageSize']}")
 	int pageSize;
 	
-	//@Test
+	@Test
 	public void testGetHobbyClass() throws Exception {
 		HobbyClass hobbyClass = new HobbyClass();
 		
@@ -68,35 +68,35 @@ public class SearchHobbyClassTest {
 		Assert.assertEquals(10000, hobbyClass.getHobbyClassNo());
 	}
 	
-	@Test
+	//@Test
 	public void testHobbyClassList() throws Exception {
-		Search search = new Search();
-		
-		search.setCurrentPage(1);
-		search.setPageSize(3);
-		
-		search.setSearchCondition("1");
-		search.setSearchKeyword("t");
-
-		List<String> hashtagList = new ArrayList<String>();
-		hashtagList.add("M01");
-		hashtagList.add("E03");
-		
-		//search.setHashtag(hashtagList);
-
-		//search.setCategory("E");
-		
-		Map<String, Object> inputData = new HashMap<String, Object>();
-		inputData.put("search", search); 
-		inputData.put("userId", "a@a.a");
-
-		inputData.put("classState", "3");
-		
-		List<HobbyClass> listHobbyClass = searchHobbyClassService.getHobbyClassList(inputData);
-		
-		for(HobbyClass hobbyClass : listHobbyClass) {
-			System.out.println("----------hobbyClass ? : " + hobbyClass);
-		}
+//		Search search = new Search();
+//		
+//		search.setCurrentPage(1);
+//		search.setPageSize(3);
+//		
+//		search.setSearchCondition("1");
+//		search.setSearchKeyword("t");
+//
+//		List<String> hashtagList = new ArrayList<String>();
+//		hashtagList.add("M01");
+//		hashtagList.add("E03");
+//		
+//		//search.setHashtag(hashtagList);
+//
+//		//search.setCategory("E");
+//		
+//		Map<String, Object> inputData = new HashMap<String, Object>();
+//		inputData.put("search", search); 
+//		inputData.put("userId", "a@a.a");
+//
+//		inputData.put("classState", "3");
+//		
+//		List<HobbyClass> listHobbyClass = searchHobbyClassService.getHobbyClassList(inputData);
+//		
+//		for(HobbyClass hobbyClass : listHobbyClass) {
+//			System.out.println("----------hobbyClass ? : " + hobbyClass);
+//		}
 	}
 	
 	//@Test 
@@ -109,21 +109,21 @@ public class SearchHobbyClassTest {
 		inputData.put("search", search);
 		inputData.put("hobbyClassNo", 10000);
 		
-		List<ClassAssess> listAssessContent = searchHobbyClassService.getHobbyClassAssessContent(inputData); 
+//		List<ClassAssess> listAssessContent = searchHobbyClassService.getHobbyClassAssessContent(inputData); 
 		
-		for(ClassAssess classAssess : listAssessContent) {
-			System.out.println("-----------------------classAssess ? : " + classAssess);
-		}
+//		for(ClassAssess classAssess : listAssessContent) {
+//			System.out.println("-----------------------classAssess ? : " + classAssess);
+//		}
 	}
 	
 	//@Test
-	public void testLessonContent() throws Exception {
-		List<Lesson> lessonList = searchHobbyClassService.getHobbyClassLessonContent(10000);
-		
-		for ( Lesson lesson : lessonList ) { 
-			System.out.println("-----lesson ? : " + lesson);
-		}
-	}
+//	public void testLessonContent() throws Exception {
+//		List<Lesson> lessonList = searchHobbyClassService.getHobbyClassLessonContent(10000);
+//		
+//		for ( Lesson lesson : lessonList ) { 
+//			System.out.println("-----lesson ? : " + lesson);
+//		}
+//	}
 	
 	//@Test
 	public void testLessonTimes() throws Exception {
@@ -141,34 +141,34 @@ public class SearchHobbyClassTest {
 	
 	//@Test
 	public void testPopularHobbyClassList() throws Exception {
-		Map<String, Object> inputData = new HashMap<String, Object>();
-		
-		Search search = new Search();
-		// ����ȭ��ǥ �������� ������ȭ��ǥ �������� Ȯ�ο� ����
-		String check = "0";
-		
-		// ����ȭ��ǥ�� 
-		if ( check.equals("0")) { 
-			// ���������� (2)�� ���� ��������
-			search.setCurrentPage(2 - 1);
-		}
-		// ������ȭ��ǥ�� 
-		else if ( check.equals("1")) {
-			// ���������� (2)�� ���� ��������
-			search.setCurrentPage(2 + 1);
-		}
-		// currentPage == 4�϶� 1�� 1�϶� 4�� 
-		
-		search.setPageSize(pageSize);
-		
-		inputData.put("search", search);
-		inputData.put("userId", "a@a.a");
-		
-		List<HobbyClass> popularHobbyClassList = searchHobbyClassService.getPopularHobbyClassList(inputData);
-		
-		for (HobbyClass hobbyClass : popularHobbyClassList) {
-			System.out.println("-------hobbyClass ? : " + hobbyClass);
-		}
+//		Map<String, Object> inputData = new HashMap<String, Object>();
+//		
+//		Search search = new Search();
+//
+//		String check = "0";
+//		
+//
+//		if ( check.equals("0")) { 
+//
+//			search.setCurrentPage(2 - 1);
+//		}
+//
+//		else if ( check.equals("1")) {
+//
+//			search.setCurrentPage(2 + 1);
+//		}
+//
+//		
+//		search.setPageSize(pageSize);
+//		
+//		inputData.put("search", search);
+//		inputData.put("userId", "a@a.a");
+//		
+//		List<HobbyClass> popularHobbyClassList = searchHobbyClassService.getPopularHobbyClassList(inputData);
+//		
+//		for (HobbyClass hobbyClass : popularHobbyClassList) {
+//			System.out.println("-------hobbyClass ? : " + hobbyClass);
+//		}
 	}
 	
 	//@Test
@@ -176,20 +176,20 @@ public class SearchHobbyClassTest {
 		Map<String, Object> inputData = new HashMap<String, Object>();
 		
 		Search search = new Search();
-		// ����ȭ��ǥ �������� ������ȭ��ǥ �������� 
+
 		String check = "0";
 		
-		// ����ȭ��ǥ�� 
+		
 		if ( check.equals("0")) { 
-			// ���������� (2)�� ���� ��������
+
 			search.setCurrentPage(2 - 1);
 		}
-		// ������ȭ��ǥ�� 
+
 		else if ( check.equals("1")) {
-			// ���������� (2)�� ���� ��������
+
 			search.setCurrentPage(2 + 1);
 		}
-		// currentPage == 4�϶� 1�� 1�϶� 4�� 
+
 		
 		search.setPageSize(pageSize);
 		
@@ -218,39 +218,39 @@ public class SearchHobbyClassTest {
 		classAssess.setHobbyClass(hobbyClass);
 		
 		classAssess.setAssessStar(4);
-		classAssess.setAssessContent("�̰� ���ƿ� ��õ");
+		classAssess.setAssessContent("이거 좋아요");
 		
 		searchHobbyClassService.addHobbyClassAssess(classAssess);
 	}
 	
 	//@Test
 	public void testRecommendHobbyClassList() throws Exception {
-		List<String> hashtagList = searchHobbyClassService.getUserSelectHashtag("a@a.a");
-		
-		for (String a : hashtagList ) { 
-			System.out.println("-------a ? : " + a);
-		}
-		
-		Search search = new Search();
-		
-		search.setCurrentPage(1);
-		search.setPageSize(pageSize);
-		
-		search.setHashtag(hashtagList);
-		
-		Map<String, Object> inputData = new HashMap<String, Object>();
-		
-		inputData.put("search", search);
-		inputData.put("userId", "a@a.a");
-		inputData.put("classState", "3");
-		
-		List<HobbyClass> recommendHobbyClassList = searchHobbyClassService.getHobbyClassList(inputData);
-		
-		for(HobbyClass hobbyClass : recommendHobbyClassList) {
-			System.out.println("------------hobbyClass ? : " + hobbyClass);
-		}
-		
-		
+//		List<String> hashtagList = searchHobbyClassService.getUserSelectHashtag("a@a.a");
+//		
+//		for (String a : hashtagList ) { 
+//			System.out.println("-------a ? : " + a);
+//		}
+//		
+//		Search search = new Search();
+//		
+//		search.setCurrentPage(1);
+//		search.setPageSize(pageSize);
+//		
+//		search.setHashtag(hashtagList);
+//		
+//		Map<String, Object> inputData = new HashMap<String, Object>();
+//		
+//		inputData.put("search", search);
+//		inputData.put("userId", "a@a.a");
+//		inputData.put("classState", "3");
+//		
+//		List<HobbyClass> recommendHobbyClassList = searchHobbyClassService.getHobbyClassList(inputData);
+//		
+//		for(HobbyClass hobbyClass : recommendHobbyClassList) {
+//			System.out.println("------------hobbyClass ? : " + hobbyClass);
+//		}
+//		
+//		
 	}
 	
 }

@@ -117,7 +117,7 @@ public class MyHobbyClassTest {
 		myHobbyClassService.addSteamHobbyClass(inputData);
 	}
 	
-	@Test
+	//@Test
 	public void testdeleteSteam() throws Exception {
 		Map<String, Object> inputData = new HashMap<String, Object>();
 		inputData.put("userId", "a@a.a");
@@ -128,5 +128,24 @@ public class MyHobbyClassTest {
 		inputData.put("steamCount", steamCount - 1);
 		
 		myHobbyClassService.deleteSteamHobbyClass(inputData);
+	}
+	
+	@Test 
+	public void testRecommendHobbyClassList() throws Exception {
+		String userId = "c@c.c";
+		
+		Search search = new Search();
+		search.setCurrentPage(1);
+		search.setPageSize(3);
+		
+		Map<String, Object> inputData = new HashMap<String, Object>();
+		inputData.put("search", search);
+		inputData.put("userId", userId);
+		
+		List<HobbyClass> recommendHobbyClassList = myHobbyClassService.getRecommendHobbyClassList(inputData);
+		
+		for(HobbyClass hobbyClass : recommendHobbyClassList) {
+			System.out.println("--------hobbyClass ? : " + hobbyClass);
+		}
 	}
 }

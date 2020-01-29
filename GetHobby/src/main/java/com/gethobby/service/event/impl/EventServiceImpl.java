@@ -38,9 +38,8 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public Event getEvent(int eventNo) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public Event getEvent(String eventTitle) throws Exception {
+		return eventDAO.getEvent(eventTitle);
 	}
 	
 	@Override

@@ -45,7 +45,7 @@
 		<result property="assessContent"  	 				column="assess_content" jdbcType="VARCHAR" />
 		<result property="regDate" 	 	 		 			column="reg_date"  	 	jdbcType="VARCHAR" />
 	</resultMap>
-	
+	<!--  
 	<resultMap id="lessonMap" type="lesson">
 		<result property="lessonNo" 					column="lesson_no" 		jdbcType="INTEGER" />
 		<result property="hobbyClass.hobbyClassNo" 		column="class_no"		jdbcType="INTEGER" />
@@ -69,6 +69,27 @@
 		<result property="maxTimes" 				column="max_times" 		jdbcType="INTEGER" />
 		<result property="hobbyClass.hobbyClassNo" 	column="class_no"		jdbcType="INTEGER" />
 	</resultMap>
+	-->
+	
+	<resultMap id="lessonTimesMap" type="lessonTimes">
+		<result property="timeNo" 							column="time_no"		jdbcType="INTEGER" />
+		<result property="user.userId"						column="user_id"		jdbcType="VARCHAR" />
+		<result property="lesson.lessonNo"  				column="lesson_no"      jdbcType="INTEGER" />
+		<result property="lesson.hobbyClass.hobbyClassNo" 	column="class_no" 		jdbcType="INTEGER" />
+		<result property="lesson.hobbyClass.hobbyClassName" column="class_title" 	jdbcType="VARCHAR" />
+		<result property="lesson.lessonTitle"				column="lesson_title"	jdbcType="VARCHAR" />
+		<result property="lesson.lessonImage"				column="lesson_image"	jdbcType="VARCHAR" />
+		<result property="lesson.lessonIntro"			 	column="lesson_intro"	jdbcType="VARCHAR" />
+		<result property="lesson.lessonContent"				column="lesson_content" jdbcType="CLOB"		javaType="java.lang.String" />
+		<result property="lesson.lessonProject"		 		column="lesson_project" jdbcType="VARCHAR" />
+		<result property="lesson.lessonVideo"		 		column="lesson_video"	jdbcType="VARCHAR" />
+		<result property="lesson.totalCount"	 	 	 	column="total_count"	jdbcType="INTEGER" />
+		<result property="lesson.currentCount" 		 		column="row_seq" 	 	jdbcType="INTEGER" />
+		<result property="currentTimes"  					column="current_times"  jdbcType="INTEGER" />
+		<result property="totalTimes"  						column="total_times" 	jdbcType="INTEGER" />
+		<result property="maxTimes" 						column="max_times" 		jdbcType="INTEGER" />
+		<result property="hobbyClass.hobbyClassNo" 			column="class_no"		jdbcType="INTEGER" />
+	</resultMap>
 	
 	<resultMap id="userMap" type="user">
 		<result property="userId"		column="user_id"		jdbcType="VARCHAR" />
@@ -82,11 +103,11 @@
 		<result property="nickName" 	column="nickname"       jdbcType="VARCHAR" />
 	</resultMap>
 	
- 	<select id="getHobbyClass" parameterType="java.util.Map" resultMap="hobbyClassMap">
+ 	<select id="getSearchHobbyClass" parameterType="java.util.Map" resultMap="hobbyClassMap">
  		SELECT  
  		hc.class_no, hc.user_id, hc.class_title, hc.class_image, hc.class_state, hc.class_intro, hc.class_price, hc.total_money, 
  		hc.total_lesson, hc.total_student, hc.total_steam, TO_DATE(TO_CHAR(hc.start_date, 'YYYY-MM-DD'), 'YYYY-MM-DD') start_date, TO_DATE(TO_CHAR(hc.end_date, 'YYYY-MM-DD'), 'YYYY-MM-DD') end_date, 
- 		hc.category, hc.kit_name, hc.kit_price, u.nickname, u.profile_image, u.role, NVL2(s.steam_no, '1', '0') steam_check, NVL(grade.assess_star, 0) total_grade  
+ 		hc.category, hc.kit_name, hc.kit_price, hc.kit_intro, u.nickname, u.profile_image, u.role, NVL2(s.steam_no, '1', '0') steam_check, NVL(grade.assess_star, 0) total_grade  
  		FROM hobbyclass hc, users u, ( SELECT
  						  	     	   steam_no, class_no 
  						  	     	   FROM steam 
@@ -176,6 +197,13 @@
  	    </where>
 	</select>
 	
+	<select id="getHobbyClassListTotalCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		 SELECT COUNT ( * ) FROM 	
+			(   
+				<include refid="hobbyClassList" />
+				 	) countTable
+	</select>
+	
 	<sql id="assessList">
 		SELECT 
 		ca.assess_no, u.user_id, u.profile_image, u.nickname, hc.class_no, hc.class_title, ca.assess_content, TO_CHAR(ca.reg_date, 'YYYY-MM-DD') reg_date, ca.assess_star 
@@ -202,6 +230,14 @@
  	    </where>
 	</select>
 	
+	<select id="getHobbyClassAssessContentTotalCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		 SELECT COUNT ( * ) FROM 	
+			(   
+				<include refid="assessList" />
+				 	) countTable
+	</select>
+	
+	<!--  
 	<select id="getHobbyClassLessonContent" parameterType="java.lang.Integer" resultMap="lessonMap" >
 		SELECT 
 		ROWNUM, inner_table.*, sum.total_count, hc.class_no  
@@ -221,7 +257,37 @@
 		SELECT 
 		time_no, lesson_no, user_id, current_times, total_times, max_times, class_no  
 		FROM lesson_times 
-		WHERE user_id = #{userId} AND class_no = #{hobbyClassNo}  
+		WHERE user_id = #{userId:VARCHAR} AND class_no = #{hobbyClassNo}  
+	</select>
+	-->
+	
+	<select id="getHobbyClassLessonContent" parameterType="java.lang.Integer" resultMap="lessonTimesMap" >
+		SELECT  
+		* 
+		FROM ( 
+		        SELECT 
+		        ROWNUM row_seq, inner_table.* 
+		        FROM ( 
+		                SELECT 
+		                l.lesson_no, l.class_no, l.lesson_video, l.lesson_content, l.lesson_project, l.lesson_image, l.lesson_intro, l.lesson_title, 
+		                sum.total_count, lt.time_no, lt.user_id, lt.current_times, lt.total_times, lt.max_times 
+		                FROM lesson l, (
+		                                    SELECT 
+		                                    class_no, COUNT(lesson_no) total_count 
+		                                    FROM lesson
+		                                    GROUP BY class_no 
+		                               ) sum, (
+		                                         SELECT 
+		                                         lesson_no, time_no, user_id, current_times, total_times, max_times 
+		                                         FROM lesson_times 
+		                                         WHERE user_id = #{userId} 
+		                                      ) lt 
+		                WHERE l.class_no = sum.class_no 
+		                      AND l.lesson_no = lt.lesson_no(+) 
+		                      AND l.class_no = #{hobbyClassNo} 
+		                ORDER BY l.class_no ASC                  
+		             ) inner_table 
+		     ) 	
 	</select>
 	
 	<sql id="popularHobbyClassList">
@@ -259,6 +325,13 @@
  	    <where>
  	     	row_seq BETWEEN ( #{search.currentPage} - 1 ) * #{search.pageSize}  + 1 AND #{search.currentPage} * #{search.pageSize} 
  	    </where>
+	</select>
+	
+	<select id="getPopularHobbyClassListTotalCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		 SELECT COUNT ( * ) FROM 	
+			(   
+				<include refid="popularHobbyClassList" />
+				 	) countTable
 	</select>
 	
 	<sql id="registerHobbyClassList">
@@ -387,5 +460,57 @@
 		WHERE user_id = #{userId} 
 		      AND class_no = #{hobbyClassNo} 
 	</delete>
+	
+	<sql id="recommendHobbyClassList">
+		SELECT 
+		hc.class_no, hc.user_id, hc.class_title, hc.class_image, hc.class_state, hc.class_intro, hc.class_price, hc.total_money, 
+		hc.total_lesson, hc.total_student, hc.total_steam, TO_DATE(TO_CHAR(hc.start_date, 'YYYY-MM-DD'), 'YYYY-MM-DD') start_date, TO_DATE(TO_CHAR(hc.end_date, 'YYYY-MM-DD'), 'YYYY-MM-DD') end_date, 
+		hc.category, hc.kit_name, hc.kit_price, u.nickname, u.profile_image, u.role, NVL2(s.steam_no, '1', '0') steam_check, NVL(grade.assess_star, 0) total_grade     
+		FROM hobbyclass hc, users u, ( SELECT 
+									   steam_no, class_no 
+									   FROM steam 
+									   WHERE user_id = #{userId} 
+									 ) s, 
+									 	  ( SELECT  
+									        inner_table.class_no class_no 
+									        FROM ( SELECT 
+									        	   h.class_no, h.hashtag_code 
+									        	   FROM hashtag h, ( SELECT
+									        	     				 hashtag_code 
+									        	     				 FROM hashtag 
+									        	     				 WHERE user_id = #{userId} 
+									        	   				   ) inner_hashtag 
+									        	   WHERE class_no IS NOT NULL 
+									        	         AND h.hashtag_code = inner_hashtag.hashtag_code 
+									        	 ) inner_table 	 
+		 									GROUP BY class_no 
+									 	  ) h ,	   
+									 	  	    ( SELECT 
+						  	      		      	  class_no, AVG(assess_star) AS assess_star 
+						  	      		      	  FROM class_assess 
+						  	      		      	  GROUP BY class_no 
+						  	      		    	) grade  
+		WHERE hc.class_no = s.class_no(+)  
+		      AND hc.user_id = u.user_id 
+		      AND hc.class_no = h.class_no 
+		      AND hc.class_no = grade.class_no(+) 
+		ORDER BY hc.class_no ASC 
+	</sql>
+	
+	<select id="getRecommendHobbyClassList" parameterType="java.util.Map" resultMap="hobbyClassMap">
+		SELECT 
+ 		* 
+ 		FROM ( SELECT 
+ 		       inner_table.*, ROWNUM AS row_seq 
+ 		       FROM ( <include refid="recommendHobbyClassList" /> 
+ 		            ) inner_table 
+ 		       <where>
+ 		           ROWNUM <![CDATA[<=]]> #{search.currentPage} * #{search.pageSize} 
+ 		       </where>
+ 			  )
+ 	    <where>
+ 	     	row_seq BETWEEN ( #{search.currentPage} - 1 ) * #{search.pageSize}  + 1 AND #{search.currentPage} * #{search.pageSize} 
+ 	    </where>
+	</select>
 	
 </mapper>

@@ -12,7 +12,9 @@
 <result property="eventContent" 		column="EVENT_CONTENT"		jdbcType="CLOB"		javaType="java.lang.String"/>
 <result property="eventStartDate"		column="START_DATE"		jdbcType="DATE"/>
 <result property="eventEndDate" 		column="END_DATE"		jdbcType="DATE"/>
-<result property="Category" 			column="EVENT_CATEGORY"		jdbcType="VARCHAR"/>
+<!--  
+<collection property="category" 		column="EVENT_CATEGORY"		javaType="java.util.List" ofType="" select="getCategoryListById"/>
+-->
 <result property="eventDiscount" 		column="EVENT_DISCOUNT"		jdbcType="INTEGER"/>
 <result property="eventImage" 			column="EVENT_IMAGE"		jdbcType="INTEGER"/>
 <result property="hobbyClass.hobbyClassNo" 	column="class_no"	jdbcType="INTEGER"/>
@@ -20,24 +22,132 @@
 
 </resultMap>
  	
- 	<insert id="addEventAdmin" parameterType="event">
+ 	<select id="getCategoryListById" resultMap="category">
+ 		
+ 	</select>
+ 	
+ 	<insert id="addEventAdmin" parameterType="map">
  		INSERT
  		INTO event (EVENT_NO, EVENT_TITLE, EVENT_CONTENT, START_DATE, END_DATE, EVENT_CATEGORY, EVENT_DISCOUNT, EVENT_IMAGE )
- 		VALUE (		seq_event_event_no.NEXTVAL,
- 					#{eventTitle:VARCHAR},
- 					#{eventContent},
- 					#{eventStartDate},
- 					#{eventEndDate},
- 					#{Category},
- 					#{eventDiscount},
- 					#{eventImage}      )
+ 		VALUES (	seq_event_event_no.NEXTVAL,
+ 					#{event.eventTitle:VARCHAR},
+ 					#{event.eventContent},
+ 					#{event.eventEndDate},
+ 					#{event.eventStartDate},
+ 					#{sendCategory},
+ 					#{event.eventDiscount:INTEGER},
+ 					#{event.eventImage}      )
  	</insert>
  	
- 	<insert id="addEventCategory" parameterType="map">
- 		INSERT
- 		INTO event 
+	<select id="getEvent" parameterType="String" resultMap="eventSelectMap">
+		SELECT
+		event_no, event_title, event_content, start_date, end_date, event_category, event_discount, event_image
+		FROM event
+		where event_title = #{eventTitle}
+	</select>
+	
+	
+	<!-- 결과 나오는지 돌려볼것. 정렬된 list가져오기 -->
+	<select id="getEventList" parameterType="map" resultMap="eventSelectMap">
+ 		<if test='search.searchCondition.equals("진행중")'> 
+ 		SELECT *
+		FROM ( SELECT ROWNUM AS row_seq, inner_table.* 
+				FROM
+					(SELECT  *
+			 		 FROM ( SELECT event_title, start_date, to_char(end_date, 'yy/mm/dd') as endDate , event_image
+ 					 		FROM event	)
+			 		WHERE endDate  >= #{sysdate} ) inner_table
+				WHERE  ROWNUM <![CDATA[<=]]> #{search.currentPage}*#{search.pageSize}		)
+		WHERE row_seq BETWEEN (#{search.currentPage} -1)* #{search.pageSize} +1
+		AND  #{search.currentPage}* #{search.pageSize}
+		</if>
+ 	</select>
  	
- 	</insert>
+ 	<!-- 진행중 인 eventList -->
+ 	<select id="getEventListInProgress" parameterType="map" resultMap="eventSelectMap">
+ 		SELECT *
+		FROM ( SELECT ROWNUM AS row_seq, inner_table.* 
+				FROM
+					(SELECT  *
+			 		 FROM ( SELECT event_title, start_date, to_char(end_date, 'yy/mm/dd') as endDate , event_image
+ 					 		FROM event	)
+			 		WHERE endDate  <![CDATA[>=]]> #{sysdate} ) inner_table
+				WHERE  ROWNUM <![CDATA[<=]]> #{search.currentPage}*#{search.pageSize}		)
+		WHERE row_seq BETWEEN (#{search.currentPage} -1)* #{search.pageSize} +1
+		AND  #{search.currentPage}* #{search.pageSize}
+ 	</select>
+ 	
+ 	<!-- 진행중 eventList의 totalCount -->
+ 	<select id="getInProgressTotalCount" parameterType="map">
+ 		SELECT count(*)
+		FROM  ( SELECT  *
+			 	FROM ( SELECT event_title, start_date, to_char(end_date, 'yy/mm/dd') as endDate , event_image
+ 					 	FROM event	)
+			 	WHERE endDate <![CDATA[>=]]> #{sysdate}  )count_table
+ 	</select>
+ 	
+ 	<!-- 종료된 eventList -->
+ 	<select id="getEventListEnded" parameterType="map" resultMap="eventSelectMap">
+ 		SELECT *
+		FROM ( SELECT ROWNUM AS row_seq, inner_table.* 
+				FROM
+					(SELECT  *
+					 FROM ( SELECT event_title, start_date, to_char(end_date, 'yy/mm/dd') as endDate , event_image
+ 					 		FROM event	)
+					 WHERE endDate <![CDATA[<]]> #{sysdate}  ) inner_table
+				WHERE  ROWNUM <![CDATA[<=]]> #{search.currentPage}*#{search.pageSize} )
+		WHERE row_seq BETWEEN (#{search.currentPage} -1)* #{search.pageSize} +1
+		AND #{search.currentPage}* #{search.pageSize}
+ 	</select>
+ 	
+ 	<!-- 종료된 eventList의 totalCount -->
+ 	<select id="getEndedTotalCount" parameterType="map">
+ 		SELECT count(*)
+		FROM  ( SELECT  *
+			 	FROM ( SELECT event_title, start_date, to_char(end_date, 'yy/mm/dd') as endDate , event_image
+ 					 	FROM event	)
+			 	WHERE endDate <![CDATA[<]]> #{sysdate}  )count_table
+ 	</select>
+ 	
+ 	<!-- 전체(최신순으로 정렬된) eventList -->
+ 	<!-- getEventListAdmin -->
+ 	<select id="getEventListNewest" parameterType="map" resultMap="eventSelectMap">
+ 		SELECT *
+		FROM ( SELECT ROWNUM AS row_seq, inner_table.* 
+				FROM
+					(SELECT  *
+					 FROM ( SELECT event_title, start_date, to_char(end_date, 'yy/mm/dd') as endDate , event_image
+ 					 		FROM event	)
+					 order by start_date ) inner_table
+				WHERE  ROWNUM <![CDATA[<=]]> #{search.currentPage}*#{search.pageSize} )
+		WHERE row_seq BETWEEN (#{search.currentPage} -1)* #{search.pageSize} +1
+		AND #{search.currentPage}* #{search.pageSize}
+ 	</select>
+ 	
+ 	<!-- 전체(최신순으로 정렬된) eventList의 totalCount -->
+ 	<select id="getTotalCount" parameterType="map">
+ 		SELECT count(*)
+		FROM  (SELECT event_title
+		 		FROM event
+		 		group by event_title)
+ 	</select>
+ 	
+ 	
+ 	<update id="updateEventAdmin" parameterType="event">
+ 		UPDATE event
+ 		<set>
+ 			event_title = #{eventTitle},
+ 			event_content = #{eventContent},
+ 			start_date = #{eventStartDate},
+ 			end_date = #{eventEndDate},
+ 			event_discount = #{eventDiscount},
+ 			event_category = #{category},
+ 			event_image = #{eventImage}
+ 		</set>
+ 		WHERE event_no = #{eventNo}
+ 	</update>
+ 	
+ 	
  	
  	
 </mapper>
