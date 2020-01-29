@@ -11,7 +11,7 @@ public interface EventDAO {
 	
 	public Map<String, Object>getEventList(Search search)throws Exception;
 	
-	public Event getEvent(int eventNo)throws Exception;
+	public Event getEvent(String eventTitle)throws Exception;
 	
 	public void insertEventAdmin(Event event)throws Exception;
 	
