@@ -60,4 +60,11 @@ public class MyHobbyClassDAOImpl implements MyHobbyClassDAO {
 	public void deleteSteamHobbyClass(Map<String, Object> inputData) throws Exception {
 		sqlSession.delete("HobbyClassMapper.deleteSteamHobbyClass", inputData);
 	}
+
+	@Override
+	public List<HobbyClass> getRecommendHobbyClassList(Map<String, Object> inputData) throws Exception {
+		return sqlSession.selectList("HobbyClassMapper.getRecommendHobbyClassList", inputData);
+	}
+
+	
 }

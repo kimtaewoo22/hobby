@@ -51,11 +51,11 @@ public class UserController {
 	@RequestMapping(value="login", method = RequestMethod.POST)
 	public String login(@ModelAttribute("user")User user, HttpSession session) throws Exception{
 		
-		User dbUser = userService.getUser(user.getUserId());
+	//	User dbUser = userService.getUser(user.getUserId());
 		
-		if(user.getPassword().equals(dbUser.getPassword())) {
-			session.setAttribute("user", dbUser);
-		}
+//		if(user.getPassword().equals(dbUser.getPassword())) {
+//			session.setAttribute("user", dbUser);
+//		}
 		
 		return null;
 	}
@@ -70,9 +70,9 @@ public class UserController {
 	
 	@RequestMapping(value = "getUser", method = RequestMethod.GET)
 	public String getUser(@RequestParam("userId") String userId, Model model) throws Exception{
-		User user = userService.getUser(userId);
-		
-		model.addAttribute("user", user);
+//		User user = userService.getUser(userId);
+//		
+//		model.addAttribute("user", user);
 		
 		return null;
 	}

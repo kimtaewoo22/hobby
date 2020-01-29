@@ -36,7 +36,7 @@ public class UserServiceTest {
 	//@Test
 	public void testAddUser() throws Exception{
 		
-		Map map = new HashMap<String, String>();
+		Map map = new HashMap<String, Object>();
 		User user = new User();
 		user.setUserId("korea");
 		user.setName("한국");
@@ -58,8 +58,8 @@ public class UserServiceTest {
 		
 		userService.addUser(map);
 		
-		user = userService.getUser("korea");
-		
+		map = userService.getUser("korea");
+		user = (User)map.get("user");
 		Assert.assertEquals("korea",user.getUserId());
 		Assert.assertEquals("한국",user.getName());
 		Assert.assertEquals("7777",user.getPassword());
@@ -73,7 +73,10 @@ public class UserServiceTest {
 	public void testGetUser() throws Exception{
 		
 		User user = new User();
-		user = userService.getUser("abc");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map = userService.getUser("abc");
+		user = (User)map.get("user");
+		
 		
 		
 		Assert.assertEquals("abc",user.getUserId());
@@ -87,8 +90,9 @@ public class UserServiceTest {
 	//@Test
 	public void deleteUser() throws Exception{
 		User user = new User();
-		
-		user = userService.getUser("abc");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map = userService.getUser("abc");
+		user = (User)map.get("user");
 			
 		user.setRole("9");
 		userService.deleteUser(user);
@@ -98,7 +102,9 @@ public class UserServiceTest {
 	//@Test
 	public void updateUser() throws Exception{
 		User user = new User();
-		user = userService.getUser("abc");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map = userService.getUser("abc");
+		user = (User)map.get("user");
 		
 		user.setAddress("중랑구");
 		user.setDetailAddress("면목동");
@@ -122,7 +128,9 @@ public class UserServiceTest {
 	public void changeUserCreator()throws Exception{
 		
 		User user = new User();
-		user = userService.getUser("abc");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map = userService.getUser("abc");
+		user = (User)map.get("user");
 		user.setRole("1");
 		
 		Assert.assertEquals("1", user.getRole());

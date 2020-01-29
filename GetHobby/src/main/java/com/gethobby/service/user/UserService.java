@@ -12,7 +12,7 @@ public interface UserService {
 	public void addUser(Map map) throws Exception;
 	
 	//회원 상세조회
-	public User getUser(String userId)throws Exception;
+	public Map<String,Object> getUser(String userId)throws Exception;
 	
 	//회원 탈퇴
 	public void deleteUser(User user)throws Exception;

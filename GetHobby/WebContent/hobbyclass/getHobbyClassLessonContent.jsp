@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +8,12 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+	<c:forEach var="lesson" items="${lesson }">
+		${lesson.lesson.lessonNo} / ${lesson.lesson.lessonTitle} 
+		<c:if test="${lesson.maxTimes != 0 }">
+			/ ${lesson.totalTimes } / ${lesson.currentTimes } / ${lesson.maxTimes }
+		</c:if>
+		<br/><br/><br/>
+	</c:forEach>
 </body>
 </html>

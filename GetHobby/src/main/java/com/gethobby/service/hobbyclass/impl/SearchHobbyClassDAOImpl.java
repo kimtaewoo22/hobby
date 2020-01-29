@@ -34,8 +34,8 @@ public class SearchHobbyClassDAOImpl implements SearchHobbyClassDAO {
 	
 	@Override
 	public HobbyClass getHobbyClass(Map<String, Object> inputData) throws Exception {
-		HobbyClass returnClass = sqlSession.selectOne("HobbyClassMapper.getHobbyClass", inputData);
-		returnClass.setHashtag(sqlSession.selectList("HobbyClassMapper.getHobbyClassHashtag", (Integer)inputData.get("hobbyClassNo")));
+		HobbyClass returnClass = sqlSession.selectOne("HobbyClassMapper.getSearchHobbyClass", inputData);
+		returnClass.setHashtag(sqlSession.selectList("HobbyClassMapper.getHobbyClassHashtag", inputData.get("hobbyClassNo")));
 		return returnClass;
 	}
 
@@ -59,8 +59,8 @@ public class SearchHobbyClassDAOImpl implements SearchHobbyClassDAO {
 
 
 	@Override
-	public List<Lesson> getHobbyClassLessonContent(int hobbyClassNo) throws Exception {
-		return sqlSession.selectList("HobbyClassMapper.getHobbyClassLessonContent", hobbyClassNo);
+	public List<LessonTimes> getHobbyClassLessonContent(Map<String, Object> inputData) throws Exception {
+		return sqlSession.selectList("HobbyClassMapper.getHobbyClassLessonContent", inputData);
 	}
 
 
@@ -92,6 +92,24 @@ public class SearchHobbyClassDAOImpl implements SearchHobbyClassDAO {
 	@Override
 	public List<String> getUserSelectHashtag(String userId) throws Exception {
 		return sqlSession.selectList("HobbyClassMapper.getUserSelectHashtag", userId);
+	}
+
+
+	@Override
+	public int getHobbyClassAssessContentTotalCount(Map<String, Object> inputData) throws Exception {
+		return sqlSession.selectOne("HobbyClassMapper.getHobbyClassAssessContentTotalCount", inputData);
+	}
+
+
+	@Override
+	public int getHobbyClassListTotalCount(Map<String, Object> inputData) throws Exception {
+		return sqlSession.selectOne("HobbyClassMapper.getHobbyClassListTotalCount", inputData);
+	}
+
+
+	@Override
+	public int getPopularHobbyClassListTotalCount(Map<String, Object> inputData) throws Exception {
+		return sqlSession.selectOne("HobbyClassMapper.getPopularHobbyClassListTotalCount", inputData);
 	}
 
 }

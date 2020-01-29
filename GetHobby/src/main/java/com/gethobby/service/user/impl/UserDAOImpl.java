@@ -72,5 +72,10 @@ public class UserDAOImpl implements UserDAO {
 		return sqlSession.selectList("UserMapper.getStopUserList",search);
 	}
 
+	@Override
+	public List<String> getUserHashtag(String userId) throws Exception {		
+		return sqlSession.selectList("UserMapper.getUserHashtag",userId);
+	}
+
 
 }

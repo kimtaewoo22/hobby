@@ -1,6 +1,7 @@
 package com.gethobby.service.hobbyclass.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -53,7 +54,7 @@ public class SearchHobbyClassServiceImpl implements SearchHobbyClassService {
 	}
 
 	@Override
-	public List<HobbyClass> getHobbyClassList(Map<String, Object> inputData) throws Exception {
+	public Map<String, Object> getHobbyClassList(Map<String, Object> inputData) throws Exception {
 		List<HobbyClass> hobbyClassList = searchHobbyClassDAO.getHobbyClassList(inputData);
 		
 		for ( int i = 0; i < hobbyClassList.size(); i++ ) {
@@ -73,17 +74,26 @@ public class SearchHobbyClassServiceImpl implements SearchHobbyClassService {
 			hobbyClass.setTotalGrade( Math.round(hobbyClass.getTotalGrade() * 10) / 10.0 );
 		}
 		
-		return hobbyClassList;
+		int totalCount = searchHobbyClassDAO.getHobbyClassListTotalCount(inputData);
+		
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		returnMap.put("total", totalCount);
+		returnMap.put("list", hobbyClassList);
+		
+		return returnMap;
 	}
 
 	@Override
-	public List<ClassAssess> getHobbyClassAssessContent(Map<String, Object> inputData) throws Exception {
-		return searchHobbyClassDAO.getHobbyClassAssessContent(inputData);
+	public Map<String, Object> getHobbyClassAssessContent(Map<String, Object> inputData) throws Exception {
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		returnMap.put("list", searchHobbyClassDAO.getHobbyClassAssessContent(inputData));
+		returnMap.put("total", searchHobbyClassDAO.getHobbyClassAssessContentTotalCount(inputData));
+		return returnMap;
 	}
 
 	@Override
-	public List<Lesson> getHobbyClassLessonContent(int hobbyClassNo) throws Exception {
-		return searchHobbyClassDAO.getHobbyClassLessonContent(hobbyClassNo);
+	public List<LessonTimes> getHobbyClassLessonContent(Map<String, Object> inputData) throws Exception {
+		return searchHobbyClassDAO.getHobbyClassLessonContent(inputData);
 	}
 
 	@Override
@@ -92,7 +102,7 @@ public class SearchHobbyClassServiceImpl implements SearchHobbyClassService {
 	}
 
 	@Override
-	public List<HobbyClass> getPopularHobbyClassList(Map<String, Object> inputData) throws Exception {
+	public Map<String, Object> getPopularHobbyClassList(Map<String, Object> inputData) throws Exception {
 		List<HobbyClass> hobbyClassList = searchHobbyClassDAO.getPopularHobbyClassList(inputData);
 		
 		for ( int i = 0; i < hobbyClassList.size(); i++ ) {
@@ -112,7 +122,13 @@ public class SearchHobbyClassServiceImpl implements SearchHobbyClassService {
 			hobbyClass.setTotalGrade( Math.round(hobbyClass.getTotalGrade() * 10) / 10.0 );
 		}
 		
-		return hobbyClassList;
+		int totalCount = searchHobbyClassDAO.getPopularHobbyClassListTotalCount(inputData);
+		
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		returnMap.put("list", hobbyClassList);
+		returnMap.put("total", totalCount);
+		
+		return returnMap;
 	}
 
 	@Override
