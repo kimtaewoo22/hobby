@@ -22,9 +22,7 @@
 
 </resultMap>
  	
- 	<select id="getCategoryListById" resultMap="category">
- 		
- 	</select>
+ 	
  	
  	<insert id="addEventAdmin" parameterType="map">
  		INSERT

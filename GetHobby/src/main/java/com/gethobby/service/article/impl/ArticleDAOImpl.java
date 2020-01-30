@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.gethobby.common.Search;
 import com.gethobby.service.article.ArticleDAO;
 import com.gethobby.service.domain.Article;
+import com.gethobby.service.domain.Favor;
 
 
 @Repository("articleDAOImpl")
@@ -28,13 +29,13 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public void addArticle(Article article) throws Exception {
+	public void addBoardArticle(Article article) throws Exception {
 		sqlSession.insert("BoardArticleMapper.addBoardArticle", article);
 
 	}
 
 	@Override
-	public Article getArticle(int articleNo) throws Exception {
+	public Article getBoardArticle(int articleNo) throws Exception {
 		
 		return sqlSession.selectOne("BoardArticleMapper.getBoardArticle", articleNo);
 	}
@@ -46,13 +47,13 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public void updateArticle(Article article) throws Exception {
+	public void updateBoardArticle(Article article) throws Exception {
 		sqlSession.update("BoardArticleMapper.updateBoardArticle", article);
 		
 	}
 
 	@Override
-	public void deleteArticle(int articleNo) throws Exception {
+	public void deleteBoardArticle(int articleNo) throws Exception {
 		sqlSession.delete("BoardArticleMapper.deleteBoardArticle", articleNo);
 		
 	}
@@ -70,6 +71,31 @@ public class ArticleDAOImpl implements ArticleDAO {
 		
 		
 		return articleList;
+	}
+
+	@Override
+	public List<Article> getPhotoBoardList(Search search) throws Exception {
+		List<Article> articleList = sqlSession.selectList("BoardArticleMapper.getPhotoBoardList", search);
+		
+		System.out.println("\t\t\t\t\t " + articleList);
+		
+		return articleList;
+	}
+
+	@Override
+	public int getPhotoBoardTotalCount(Search search) throws Exception {
+		return sqlSession.selectOne("BoardArticleMapper.getPhotoBoardTotalCount", search);
+	}
+
+	@Override
+	public void addFavor(Favor favor) throws Exception {
+		sqlSession.insert("FavorMapper.addFavor", favor);
+		
+	}
+
+	@Override
+	public void deleteFavor(Favor favor) throws Exception {
+		sqlSession.delete("FavorMapper.deleteFavor",  favor);
 	}
 
 

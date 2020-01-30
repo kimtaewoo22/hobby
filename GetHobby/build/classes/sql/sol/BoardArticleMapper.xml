@@ -20,18 +20,12 @@
   		<result property="articleContent"		column="article_content" 	jdbcType="CLOB" />
   		<result property="articleImage"			column="article_image"		jdbcType="VARCHAR" />
   		<result property="totalView"			column="total_view"			jdbcType="INTEGER" />
-  		<result property="totalLike"			column="total_like"			jdbcType="INTEGER" />
+  		<result property="totalFavor"			column="total_favor"		jdbcType="INTEGER" />
   		<result property="totalReport"			column="total_report"		jdbcType="INTEGER" />
   		<result property="regDate"				column="reg_date"			jdbcType="VARCHAR" />
   		
   	</resultMap>
  	
- 	<!-- 
- 	INSERT INTO article(ARTICLE_NO, USER_ID, BOARD_CODE, ARTICLE_TYPE, ARTICLE_TITLE, ARTICLE_CONTENT, REG_DATE)
-VALUES(SEQ_ARTICLE_ARTICLE_NO.NEXTVAL, 'a@google.com', '0', '001', '첫번째로 작성하는 게시글 입니다.', '첫번째 11121111111111111111111111111111', TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI'));
- 	 -->
- 	 
- 	 
  	 
  	 <insert id="addBoardArticle" parameterType="article">
  	 	

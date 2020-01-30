@@ -38,7 +38,9 @@ public class Favor {
 
 	@Override
 	public String toString() {
-		return "Favor [article=" + article + ", favorNo=" + favorNo + "]";
+		return "Favor [user=" + user + ", article=" + article + ", favorNo=" + favorNo + "]";
 	}
+
+	
 
 }

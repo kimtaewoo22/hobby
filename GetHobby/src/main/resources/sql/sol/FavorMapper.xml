@@ -11,24 +11,68 @@
  		<result property="article.articleNo" column="article_no" jdbcType="INTEGER"/>
  		<result property="user.userId" column="user_id" jdbcType="VARCHAR"/>
  	</resultMap>
- 	
- 	<insert id="addFavor" parameterType="favor">
- 		<!-- INSERT INTO favor(favor_no, article_no, user_id)
-		VALUES(seq_favor_favor_no.NEXTVAL, #{article.articleNo}, #{user.userId})
-		
-		UPDATE article
-		SET total_favor = total_favor + 1
-		WHERE article_no = 3; -->
-		
-		<!--{ 	CALL
-				DECLARE
-				BEGIN
-				                INSERT INTO favor(favor_no, article_no, user_id)
-				                VALUES(seq_favor_favor_no.NEXTVAL, #{article.articleNo}, #{user.userId});
-				                UPDATE article
-				                SET total_favor = total_favor + 1
-				                WHERE article_no = #{article.articleNo};
-				END
-		}  -->
+	
+	<!-- 
+			# 좋아요 추가 프로시저
+			CREATE OR REPLACE PROCEDURE add_favor (
+			    p_article_no IN NUMBER,
+			    p_user_id IN VARCHAR2
+			)
+			IS  
+			BEGIN
+			    INSERT INTO favor(favor_no, article_no, user_id)
+			    VALUES(seq_favor_favor_no.NEXTVAL, p_article_no, p_user_id);
+			    
+			    
+			    UPDATE article
+			    SET total_favor = (SELECT COUNT(*) FROM favor WHERE article_no = 10)
+			    WHERE article_no = p_article_no;
+			    
+			    commit;
+			END;
+			/
+	 -->	
+ 	<insert id="addFavor" parameterType="favor" statementType="CALLABLE">
+		{ CALL 
+			add_favor(
+				p_article_no => #{article.articleNo, mode=IN, jdbcType=INTEGER}, 
+				p_user_id => #{user.userId, mode=IN, jdbcType=VARCHAR}
+			)
+		}
  	</insert>
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	<!-- 
+ 			# 좋아요 취소 프로시저
+		 	CREATE OR REPLACE PROCEDURE delete_favor (
+			    p_article_no IN NUMBER,
+			    p_user_id IN VARCHAR2
+			)
+			IS  
+			BEGIN
+			    DELETE 
+			    FROM favor
+			    WHERE article_no = p_article_no
+			    and user_id = p_user_id;
+			    
+			    UPDATE article
+			    SET total_favor = (SELECT COUNT(*) FROM favor WHERE article_no = 10)
+			    WHERE article_no = p_article_no;
+			    
+			    commit;
+			END;
+			/
+ 	 -->
+ 	 <delete id="deleteFavor" parameterType="favor" statementType="CALLABLE">
+ 	 		{ CALL 
+				delete_favor(
+					p_article_no => #{article.articleNo, mode=IN, jdbcType=INTEGER}, 
+					p_user_id => #{user.userId, mode=IN, jdbcType=VARCHAR}
+				)
+			}
+ 	 </delete>
 </mapper>

@@ -181,7 +181,7 @@
  		ORDER BY hc.class_no ASC 
 	</sql>
 	
-	<select id="getHobbyClassList" parameterType="java.util.Map" resultMap="hobbyClassMap">
+	<select id="getSearchHobbyClassList" parameterType="java.util.Map" resultMap="hobbyClassMap">
 		SELECT 
  		* 
  		FROM ( SELECT 
